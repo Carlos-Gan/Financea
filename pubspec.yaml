@@ -1,0 +1,66 @@
+name: financea
+description: "App para administrar tus finanzas personales"
+publish_to: 'none'
+version: 1.0.1
+
+environment:
+  sdk: ^3.7.2
+
+dependencies:
+  flutter:
+    sdk: flutter
+  font_awesome_flutter: ^10.8.0
+
+  #Graficas
+  syncfusion_flutter_charts: ^29.1.40
+  #Bases de datos
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+
+  #Generar RFC4122
+  uuid: ^4.5.1
+  
+  #Internalizacion
+  intl: ^0.20.2
+
+  #Animacion
+  animate_do: ^4.2.0
+
+  #Dialogos
+  panara_dialogs: ^0.1.5
+
+  #Animaciones exportadas a json
+  lottie: ^3.3.1
+
+  #Slider
+  flutter_slider_drawer: ^3.0.2
+
+  #Seleccion de fecha
+  flutter_cupertino_date_picker_fork: ^1.0.7
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  build_runner: ^2.4.15
+  hive_generator: ^2.0.1
+  
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/upwork.png
+    - assets/starbucks.png
+    - assets/amazon.png
+    - assets/uber.png
+    - assets/steam.png
+    - assets/mcdonalds.png
+
+    #Imagenes de la app
+    - img/Education.png
+    - img/Food.png
+    - img/Transfer.png
+    - img/Transport.png
+    - img/Income.png
+    - img/Expense.png
