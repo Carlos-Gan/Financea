@@ -45,18 +45,18 @@ class _AddCardScreenState extends State<AddCardScreen> {
   }
 
   List<String> months = [
-    AppStr.enero,
-    AppStr.febrero,
-    AppStr.marzo,
-    AppStr.abril,
-    AppStr.mayo,
-    AppStr.junio,
-    AppStr.julio,
-    AppStr.agosto,
-    AppStr.septiembre,
-    AppStr.octubre,
-    AppStr.noviembre,
-    AppStr.diciembre,
+    AppStr.get('enero'),
+    AppStr.get('febrero'),
+    AppStr.get('marzo'),
+    AppStr.get('abril'),
+    AppStr.get('mayo'),
+    AppStr.get('junio'),
+    AppStr.get('julio'),
+    AppStr.get('agosto'),
+    AppStr.get('septiembre'),
+    AppStr.get('octubre'),
+    AppStr.get('noviembre'),
+    AppStr.get('diciembre'),
   ];
 
   List<int> days = List.generate(31, (index) => index + 1);
@@ -79,7 +79,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
 
   AlertDialog dialogoFechas(BuildContext context) {
     return AlertDialog(
-      title: const Text(AppStr.chooseDateCut),
+      title: Text(AppStr.get('getchooseDateCut')),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -90,7 +90,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
                 children: [
                   DropdownButton<String>(
                     value: selectedMonthCorte,
-                    hint: const Text(AppStr.chooseMonth),
+                    hint: Text(AppStr.get('getchooseMonth')),
                     onChanged: (String? newMonth) {
                       setDialogState(() {
                         selectedMonthCorte = newMonth;
@@ -109,7 +109,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
                   ),
                   DropdownButton<int>(
                     value: selectedDayCorte,
-                    hint: const Text(AppStr.chooseDay),
+                    hint: Text(AppStr.get('getchooseDay')),
                     onChanged: (int? newDay) {
                       setDialogState(() {
                         selectedDayCorte = newDay;
@@ -151,11 +151,11 @@ class _AddCardScreenState extends State<AddCardScreen> {
               Navigator.pop(context);
             }
           },
-          child: const Text(AppStr.select),
+          child:  Text(AppStr.get('getselect')),
         ),
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: const Text(AppStr.cancel),
+          child:  Text(AppStr.get('getcancel')),
         ),
       ],
     );
@@ -167,7 +167,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text(AppStr.chooseDateLimit),
+          title:  Text(AppStr.get('getchooseDateLimit')),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -178,7 +178,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
                     children: [
                       DropdownButton<String>(
                         value: selectedMonthLimite,
-                        hint: const Text(AppStr.chooseMonth),
+                        hint: Text(AppStr.get('getchooseMonth')),
                         onChanged: (String? newMonth) {
                           setDialogState(() {
                             selectedMonthLimite = newMonth;
@@ -197,7 +197,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
                       ),
                       DropdownButton<int>(
                         value: selectedDayLimite,
-                        hint: const Text(AppStr.chooseDay),
+                        hint:  Text(AppStr.get('getchooseDay')),
                         onChanged: (int? newDay) {
                           setDialogState(() {
                             selectedDayLimite = newDay;
@@ -239,11 +239,11 @@ class _AddCardScreenState extends State<AddCardScreen> {
                   Navigator.pop(context);
                 }
               },
-              child: const Text(AppStr.select),
+              child:  Text(AppStr.get('getselect')),
             ),
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text(AppStr.cancel),
+              child:  Text(AppStr.get('getcancel')),
             ),
           ],
         );
@@ -256,7 +256,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text(AppStr.addCardTitle),
+        title:  Text(AppStr.get('getaddCardTitle')),
         backgroundColor: AppColors.secondaryColor,
       ),
       body: Padding(
@@ -266,8 +266,8 @@ class _AddCardScreenState extends State<AddCardScreen> {
           child: ListView(
             children: [
               // Tipo de método de pago
-              const Text(
-                AppStr.paymentMethod,
+               Text(
+                AppStr.get('getpaymentMethod'),
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               metodoPago(),
@@ -277,22 +277,22 @@ class _AddCardScreenState extends State<AddCardScreen> {
               if (selectedPayment == PaymentType.card) ...[
                 TextFormField(
                   controller: nameController,
-                  decoration: const InputDecoration(labelText: AppStr.nameCard),
-                  validator: (value) => value!.isEmpty ? AppStr.required : null,
+                  decoration:  InputDecoration(labelText: AppStr.get('getnameCard')),
+                  validator: (value) => value!.isEmpty ? AppStr.get('getrequired') : null,
                 ),
                 TextFormField(
                   controller: numberController,
-                  decoration: const InputDecoration(
-                    labelText: AppStr.numberCard,
+                  decoration:  InputDecoration(
+                    labelText: AppStr.get('getnumberCard'),
                   ),
                   keyboardType: TextInputType.number,
                 ),
                 TextFormField(
                   controller: bankController,
-                  decoration: const InputDecoration(labelText: AppStr.bank),
+                  decoration:  InputDecoration(labelText: AppStr.get('getbank')),
                 ),
                 SwitchListTile(
-                  title: const Text(AppStr.isCredit),
+                  title:  Text(AppStr.get('getisCredit')),
                   value: isCredit,
                   onChanged: (val) => setState(() => isCredit = val),
                 ),
@@ -300,13 +300,13 @@ class _AddCardScreenState extends State<AddCardScreen> {
                   //Limite de tarjeta de credito
                   TextFormField(
                     controller: limitController,
-                    decoration: const InputDecoration(labelText: AppStr.limit),
+                    decoration:  InputDecoration(labelText: AppStr.get('getlimit')),
                     keyboardType: TextInputType.number,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(AppStr.dateLimit),
+                       Text(AppStr.get('getdateLimit')),
                       Row(
                         children: [
                           Text(
@@ -315,7 +315,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
                                 : selectedDayLimite != null &&
                                     selectedMonthLimite != null
                                 ? '$selectedDayLimite/${months.indexOf(selectedMonthLimite!) + 1}'
-                                : AppStr.chooseDate,
+                                : AppStr.get('getchooseDate'),
                           ),
                           IconButton(
                             icon: const Icon(Icons.calendar_today),
@@ -328,7 +328,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(AppStr.dateCut),
+                      Text(AppStr.get('getdateCut')),
                       Row(
                         children: [
                           Text(
@@ -337,7 +337,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
                                 : selectedDayCorte != null &&
                                     selectedMonthCorte != null
                                 ? '$selectedDayCorte/${months.indexOf(selectedMonthCorte!) + 1}'
-                                : AppStr.chooseDate,
+                                : AppStr.get('getchooseDate'),
                           ),
                           IconButton(
                             icon: const Icon(Icons.calendar_today),
@@ -360,7 +360,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
 
                   final card = CardData(
                     selectedPayment == PaymentType.cash
-                        ? AppStr.cash
+                        ? AppStr.get('getcash')
                         : nameController.text,
                     selectedPayment == PaymentType.cash
                         ? null
@@ -399,7 +399,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
 
                   Navigator.pop(context);
                 },
-                child: const Text(AppStr.addCard),
+                child: Text(AppStr.get('getaddCard')),
               ),
             ],
           ),
@@ -412,13 +412,13 @@ class _AddCardScreenState extends State<AddCardScreen> {
     return Column(
       children: [
         RadioListTile<PaymentType>(
-          title: const Text(AppStr.card),
+          title:  Text(AppStr.get('getcard')),
           value: PaymentType.card,
           groupValue: selectedPayment,
           onChanged: (value) => setState(() => selectedPayment = value!),
         ),
         RadioListTile<PaymentType>(
-          title: const Text(AppStr.cash),
+          title:  Text(AppStr.get('getcash')),
           value: PaymentType.cash,
           groupValue: selectedPayment,
           onChanged: (value) => setState(() => selectedPayment = value!),

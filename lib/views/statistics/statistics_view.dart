@@ -51,7 +51,7 @@ class _StatisticsViewState extends State<StatisticsView> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Text(
-                'Statistics',
+                AppStr.get('statistics'),
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
@@ -112,7 +112,7 @@ class _StatisticsViewState extends State<StatisticsView> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           Text(
-                            showExpenses ? AppStr.expenses : AppStr.income,
+                            showExpenses ? AppStr.get('expenses') : AppStr.get('income'),
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
@@ -140,8 +140,8 @@ class _StatisticsViewState extends State<StatisticsView> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
-                    AppStr.topSpending,
+                   Text(
+                    AppStr.get('topSpending'),
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,

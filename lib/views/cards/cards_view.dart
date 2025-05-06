@@ -40,7 +40,7 @@ class _CardsViewState extends State<CardsView> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(AppStr.paymentMethods),
+        title: Text(AppStr.get('paymentMethods')),
         centerTitle: true,
         backgroundColor: AppColors.secondaryColor,
       ),
@@ -57,10 +57,10 @@ class _CardsViewState extends State<CardsView> {
                 );
                 setState(() {}); // Refresca luego de volver
               },
-              child: const Align(
+              child: Align(
                 alignment: Alignment.centerRight,
                 child: Text(
-                  '+ ${AppStr.addCardTitle}',
+                  '+ ${AppStr.get('addCardTitle')}',
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 16,
@@ -77,7 +77,7 @@ class _CardsViewState extends State<CardsView> {
               valueListenable: cardBox!.listenable(),
               builder: (context, Box<CardData> box, _) {
                 if (box.isEmpty) {
-                  return const Center(child: Text(AppStr.nocards));
+                  return Center(child: Text(AppStr.get('nocards')));
                 }
 
                 return ListView.builder(
@@ -131,7 +131,7 @@ class _CardsViewState extends State<CardsView> {
                               ),
                               title: Text(card.cardName),
                               subtitle: Text(
-                                '${card.bank} - ${card.cardNumber ?? AppStr.noNumber}',
+                                '${card.bank} - ${card.cardNumber ?? AppStr.get('noNumber')}',
                               ),
                               trailing: IconButton(
                                 icon: const Icon(Icons.delete),
@@ -140,20 +140,20 @@ class _CardsViewState extends State<CardsView> {
                                     context: context,
                                     builder: (BuildContext context) {
                                       return AlertDialog(
-                                        title: const Text(AppStr.areYouSure),
-                                        content: const Text(
-                                          AppStr.deleteCardMessage,
+                                        title:  Text(AppStr.get('areYouSure')),
+                                        content:  Text(
+                                          AppStr.get('deleteCardMessage'),
                                         ),
                                         actions: [
                                           TextButton(
-                                            child: const Text(AppStr.cancel),
+                                            child:  Text(AppStr.get('cancel')),
                                             onPressed: () {
                                               Navigator.of(context).pop();
                                             },
                                           ),
                                           TextButton(
-                                            child: const Text(
-                                              AppStr.delete,
+                                            child:  Text(
+                                              AppStr.get('delete'),
                                               style: TextStyle(
                                                 color: Colors.red,
                                               ),
@@ -185,7 +185,7 @@ class _CardsViewState extends State<CardsView> {
                                   Text(
                                     progress > 1
                                         ? '¡Tarjeta sobregirada! Uso: ${(progress * 100).toStringAsFixed(0)}%'
-                                        : '${AppStr.creditAvailable}: \$${creditAvailable.toStringAsFixed(2)} (${(progress * 100).toStringAsFixed(0)}%)',
+                                        : '${AppStr.get('creditAvailable')}: \$${creditAvailable.toStringAsFixed(2)} (${(progress * 100).toStringAsFixed(0)}%)',
                                     style: TextStyle(
                                       fontWeight: FontWeight.bold,
                                       color:

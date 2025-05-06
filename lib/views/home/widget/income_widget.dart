@@ -32,7 +32,7 @@ class Income extends StatelessWidget {
                 ),
                 SizedBox(width: 10),
                 Text(
-                  AppStr.income,
+                  AppStr.get('income'),
                   style: TextStyle(fontSize: 20, color: Colors.grey[400]),
                 ),
               ],

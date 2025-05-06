@@ -32,7 +32,7 @@ class Expenses extends StatelessWidget {
                 ),
                 SizedBox(width: 10),
                 Text(
-                  AppStr.expenses,
+                  AppStr.get('expenses'),
                   style: TextStyle(fontSize: 20, color: Colors.grey[400]),
                 ),
               ],

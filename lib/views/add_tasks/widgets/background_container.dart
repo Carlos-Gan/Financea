@@ -38,7 +38,7 @@ class BackgroundContainer extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      AppStr.add,
+                      AppStr.get('add'),
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,

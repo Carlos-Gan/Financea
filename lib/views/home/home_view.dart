@@ -9,7 +9,6 @@ import 'package:financea/views/home/widget/expenses_widget.dart';
 import 'package:financea/views/home/widget/income_widget.dart';
 import 'package:financea/views/home/widget/welcome_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:intl/intl.dart';
 
@@ -36,7 +35,7 @@ class HomeView extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        AppStr.transactionHistory,
+                        AppStr.get('transactionHistory'),
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w600,
@@ -44,7 +43,7 @@ class HomeView extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        AppStr.seeAll,
+                        AppStr.get('seeAll'),
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,

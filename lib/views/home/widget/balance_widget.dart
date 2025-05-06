@@ -21,7 +21,7 @@ class Balance extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        AppStr.balance,
+                        AppStr.get('balance'),
                         style: TextStyle(fontSize: 20, color: Colors.grey[400]),
                       ),
                       Text(

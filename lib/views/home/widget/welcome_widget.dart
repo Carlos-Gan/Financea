@@ -1,14 +1,18 @@
 import 'dart:developer';
 import 'package:financea/utils/app_colors.dart';
 import 'package:financea/utils/app_str.dart';
+import 'package:financea/views/settings/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
 class WelcomeWidget extends StatelessWidget {
   const WelcomeWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // Proveedor de configuraciones de usuario;
+    final username = Provider.of<UserSettings>(context).username;
     return Column(
       children: [
         Container(
@@ -50,15 +54,21 @@ class WelcomeWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      AppStr.goodAfternoon,
+                      //Cambia el mensaje de bienvenida dependiendo de la hora
+                      DateTime.now().hour < 12
+                          ? AppStr.get("goodMorning")
+                          : DateTime.now().hour < 18
+                              ? AppStr.get("goodAfternoon")
+                              : AppStr.get('goodEvening'),
                       style: TextStyle(
                         fontWeight: FontWeight.w500,
                         fontSize: 20,
                         color: Colors.grey[400],
                       ),
                     ),
+                    //Cambia el nombre en vez de AppStr.
                     Text(
-                      AppStr.userName,
+                       username,
                       style: TextStyle(
                         fontWeight: FontWeight.w500,
                         fontSize: 30,

@@ -1,79 +1,356 @@
 class AppStr {
-  static const String goodAfternoon = 'Good Afternoon';
-  static const String userName = 'Carlos Gandara';
-  static const String income = 'Income';
-  static const String expenses = 'Expenses';
-  static const String transactionHistory = 'Transaction History';
-  static const String seeAll = 'See All';
-  static const String balance = 'Total Balance';
-  static const String expensesMoney = '800.00';
-  static const String transfer = 'Transfer';
-  static const String today = 'Today';
-  static const String topSpending = 'Top Spending';
-  static const String noName = 'No Name';
-  static const String add = 'Add';
-  static const String addTitle = 'Add Title';
-  static const String addAmount = 'Add Amount';
-  static const String name = 'Category Name';
-  static const String explain = 'Explain your transaction';
-  static const String amount = 'Amount';
-  static const String how = 'How';
-  static const String date = 'Date';
-  static const String save = 'Save';
-  static const String isSub = 'Is a Subscription?';
-  //Tarjetas
-  static const String nameCard = 'Name Card';
-  static const String numberCard = 'Number Card';
-  static const String bank = 'Bank';
-  static const String isCredit = 'Is a Credit Card?';
-  static const String limit = 'Limit';
-  static const String addCard = 'Save Card';
-  static const String addCardTitle = 'Add Payment';
-  static const String nocards = 'No cards registered.';
-  static const String paymentMethod = 'Payment Method';
-  static const String paymentMethods = 'Payment Methods';
-  static const String choosePaymentMethod = 'Choose Payment Method';
-  static const String noPaymentMethod = 'No payment method';
-  static const String cash = 'Cash';
-  static const String card = 'Card';
-  static const String creditAvailable = 'Credit Available';
-  static const String required = 'Required';
+  static String _currentLang = 'en';
 
-  static const String fillAllFields = 'Please fill all fields';
-  static const String invalidAmount = 'Invalid amount';
+  static final Map<String, Map<String, String>> _localizedValues = {
+    'en': {
+      "goodAfternoon": 'Good Afternoon',
+      "goodEvening": 'Good Evening',
+      "goodMorning": 'Good Morning',
+      "userName": 'Username',
+      "income": 'Income',
+      "expenses": 'Expenses',
+      "transactionHistory": 'Transaction History',
+      "seeAll": 'See All',
+      "balance": 'Total Balance',
+      "expensesMoney": '800.00',
+      "transfer": 'Transfer',
+      "today": 'Today',
+      "topSpending": 'Top Spending',
+      "noName": 'No Name',
+      "add": 'Add',
+      "addTitle": 'Add Title',
+      "addAmount": 'Add Amount',
+      "name": 'Category Name',
+      "explain": 'Explain your transaction',
+      "amount": 'Amount',
+      "how": 'How',
+      "date": 'Date',
+      "save": 'Save',
+      "isSub": 'Is a Subscription?',
+      //Tarjetas
+      "nameCard": 'Name Card',
+      'numberCard': 'Number Card',
+      'bank': 'Bank',
+      'isCredit': 'Is a Credit Card?',
+      'limit': 'Limit',
+      'addCard': 'Save Card',
+      'addCardTitle': 'Add Payment',
+      'nocards': 'No cards registered.',
+      'paymentMethod': 'Payment Method',
+      'paymentMethods': 'Payment Methods',
+      'choosePaymentMethod': 'Choose Payment Method',
+      'noPaymentMethod': 'No payment method',
+      'cash': 'Cash',
+      'card': 'Card',
+      'creditAvailable': 'Credit Available',
+      'required': 'Required',
+      'fillAllFields': 'Please fill all fields',
+      'invalidAmount': 'Invalid amount',
+      'areYouSure': 'Are you sure?',
+      'delete': 'Delete',
+      'statistics': 'Statistics',
+      'cancel': 'Cancel',
+      'deleteCardMessage': 'Are you sure you want to delete this card?',
+      'noNumber': 'No number',
+      'enero': 'January',
+      'febrero': 'February',
+      'marzo': 'March',
+      'abril': 'April',
+      'mayo': 'May',
+      'junio': 'June',
+      'julio': 'July',
+      'agosto': 'August',
+      'septiembre': 'Septembrer',
+      'octubre': 'October',
+      'noviembre': 'November',
+      'diciembre': 'Dicember',
+      'chooseDateCut': 'Choose last day of billing cycle: ',
+      'dateCut': 'Last day of billing cycle: ',
+      'chooseMonth': 'Choose a month',
+      'chooseDay': 'Choose a day',
+      'select': 'Confirm',
+      'chooseDateLimit': 'Choose day of payment deadline: ',
+      'dateLimit': 'Day of payment deadline: ',
+      'chooseDate': 'Choose Date',
+      'noTransactions': 'No transactions yet',
+      'settings': 'Settings',
+      'language': 'Language',
+      'changeUsername': 'Change Username',
+      'inputUsername': 'Write your new username',
+      'configSavedMessage': 'Configuration saved successfully',
+      'settingsLang': 'Language Settings',
+      'settingsProfile': 'Profile Settings',
+    },
+    'es': {
+      "goodAfternoon": 'Buenas tardes',
+      "goodEvening": 'Buenas noches',
+      "goodMorning": 'Buenos días',
+      "userName": 'Nombre de usuario',
+      "income": 'Ingresos',
+      "expenses": 'Gastos',
+      "transactionHistory": 'Historial de transacciones',
+      "seeAll": 'Ver todo',
+      "balance": 'Saldo total',
+      "expensesMoney": '800.00', // Este es un número, no se traduce
+      "transfer": 'Transferir',
+      "today": 'Hoy',
+      "topSpending": 'Gastos principales',
+      "noName": 'Sin nombre',
+      "add": 'Agregar',
+      "addTitle": 'Agregar título',
+      "addAmount": 'Agregar cantidad',
+      "name": 'Nombre de categoría',
+      "explain": 'Explica tu transacción',
+      "amount": 'Cantidad',
+      "how": 'Cómo',
+      "date": 'Fecha',
+      "save": 'Guardar',
+      "isSub": '¿Es una suscripción?',
+      // Tarjetas
+      "nameCard": 'Nombre en la tarjeta',
+      "numberCard": 'Número de tarjeta',
+      "bank": 'Banco',
+      "isCredit": '¿Es una tarjeta de crédito?',
+      "limit": 'Límite',
+      "addCard": 'Guardar tarjeta',
+      "addCardTitle": 'Agregar método de pago',
+      "nocards": 'No hay tarjetas registradas.',
+      "paymentMethod": 'Método de pago',
+      "paymentMethods": 'Métodos de pago',
+      "choosePaymentMethod": 'Elige un método de pago',
+      "noPaymentMethod": 'Sin método de pago',
+      "cash": 'Efectivo',
+      "card": 'Tarjeta',
+      "creditAvailable": 'Crédito disponible',
+      "required": 'Requerido',
+      "fillAllFields": 'Por favor, completa todos los campos',
+      "invalidAmount": 'Cantidad inválida',
+      "areYouSure": '¿Estás seguro?',
+      "delete": 'Eliminar',
+      "statistics": 'Estadísticas',
+      "cancel": 'Cancelar',
+      "deleteCardMessage":
+          '¿Estás seguro de que quieres eliminar esta tarjeta?',
+      "noNumber": 'Sin número',
+      "enero": 'Enero',
+      "febrero": 'Febrero',
+      "marzo": 'Marzo',
+      "abril": 'Abril',
+      "mayo": 'Mayo',
+      "junio": 'Junio',
+      "julio": 'Julio',
+      "agosto": 'Agosto',
+      "septiembre": 'Septiembre',
+      "octubre": 'Octubre',
+      "noviembre": 'Noviembre',
+      "diciembre": 'Diciembre',
+      "chooseDateCut": 'Elige el último día del ciclo de facturación: ',
+      "dateCut": 'Último día del ciclo de facturación: ',
+      "chooseMonth": 'Elige un mes',
+      "chooseDay": 'Elige un día',
+      "select": 'Confirmar',
+      "chooseDateLimit": 'Elige el día límite de pago: ',
+      "dateLimit": 'Día límite de pago: ',
+      "chooseDate": 'Elige una fecha',
+      "noTransactions": 'Aún no hay transacciones',
+      "settings": 'Configuración',
+      "language": 'Idioma',
+      "changeUsername": 'Cambiar nombre de usuario',
+      "inputUsername": 'Escribe tu nuevo nombre de usuario',
+      "configSavedMessage": 'Configuración guardada exitosamente',
+      "settingsLang": 'Configuración de idioma',
+      "settingsProfile": 'Configuración de perfil',
+    },
+    'fr': {
+      "goodAfternoon": 'Bon après-midi',
+      "goodEvening": 'Bonsoir',
+      "goodMorning": 'Bonjour',
+      "userName": "Nom d'utilisateur",
+      "income": 'Revenu',
+      "expenses": 'Dépenses',
+      "transactionHistory": 'Historique des transactions',
+      "seeAll": 'Voir tout',
+      "balance": 'Solde total',
+      "expensesMoney": '800.00', // Valeur numérique, reste inchangée
+      "transfer": 'Transférer',
+      "today": "Aujourd'hui",
+      "topSpending": 'Dépenses principales',
+      "noName": 'Sans nom',
+      "add": 'Ajouter',
+      "addTitle": 'Ajouter un titre',
+      "addAmount": 'Ajouter un montant',
+      "name": 'Nom de la catégorie',
+      "explain": 'Expliquez votre transaction',
+      "amount": 'Montant',
+      "how": 'Comment',
+      "date": 'Date',
+      "save": 'Enregistrer',
+      "isSub": 'Est-ce un abonnement ?',
 
-  static const String areYouSure = 'Are you sure?';
-  static const String delete = 'Delete';
+      // Cartes
+      "nameCard": 'Nom sur la carte',
+      "numberCard": 'Numéro de carte',
+      "bank": 'Banque',
+      "isCredit": 'Est-ce une carte de crédit ?',
+      "limit": 'Limite',
+      "addCard": 'Enregistrer la carte',
+      "addCardTitle": 'Ajouter un paiement',
+      "nocards": 'Aucune carte enregistrée.',
+      "paymentMethod": 'Méthode de paiement',
+      "paymentMethods": 'Méthodes de paiement',
+      "choosePaymentMethod": 'Choisissez une méthode de paiement',
+      "noPaymentMethod": 'Aucune méthode de paiement',
+      "cash": 'Espèces',
+      "card": 'Carte',
+      "creditAvailable": 'Crédit disponible',
+      "required": 'Requis',
+      "fillAllFields": 'Veuillez remplir tous les champs',
+      "invalidAmount": 'Montant invalide',
+      "areYouSure": 'Êtes-vous sûr ?',
+      "delete": 'Supprimer',
+      "statistics": 'Statistiques',
+      "cancel": 'Annuler',
+      "deleteCardMessage": 'Êtes-vous sûr de vouloir supprimer cette carte ?',
+      "noNumber": 'Pas de numéro',
 
-  static const String cancel = 'Cancel';
-  static const String deleteCardMessage =
-      'Are you sure you want to delete this card?';
+      // Mois
+      "enero": 'Janvier',
+      "febrero": 'Février',
+      "marzo": 'Mars',
+      "abril": 'Avril',
+      "mayo": 'Mai',
+      "junio": 'Juin',
+      "julio": 'Juillet',
+      "agosto": 'Août',
+      "septiembre": 'Septembre',
+      "octubre": 'Octobre',
+      "noviembre": 'Novembre',
+      "diciembre": 'Décembre',
 
-  static const String noNumber = 'No number';
+      "chooseDateCut": 'Choisissez le dernier jour du cycle de facturation :',
+      "dateCut": 'Dernier jour du cycle de facturation :',
+      "chooseMonth": 'Choisissez un mois',
+      "chooseDay": 'Choisissez un jour',
+      "select": 'Confirmer',
+      "chooseDateLimit": 'Choisissez la date limite de paiement :',
+      "dateLimit": 'Date limite de paiement :',
+      "chooseDate": 'Choisissez une date',
+      "noTransactions": 'Aucune transaction pour le moment',
 
-  static const String enero = 'January';
-  static const String febrero = 'February';
-  static const String marzo = 'March';
-  static const String abril = 'April';
-  static const String mayo = 'May';
-  static const String junio = 'June';
-  static const String julio = 'July';
-  static const String agosto = 'August';
-  static const String septiembre = 'Septembrer';
-  static const String octubre = 'October';
-  static const String noviembre = 'November';
-  static const String diciembre = 'Dicember';
+      "settings": 'Paramètres',
+      "language": 'Langue',
+      "changeUsername": "Changer le nom d'utilisateur",
+      "inputUsername": 'Entrez votre nouveau nom',
+      "configSavedMessage": 'Configuration enregistrée avec succès',
+      "settingsLang": 'Paramètres de langue',
+      "settingsProfile": 'Paramètres du profil',
+    },
+    'de': {
+      "goodAfternoon": 'Guten Nachmittag',
+      "goodEvening": 'Guten Abend',
+      "goodMorning": 'Guten Morgen',
+      "userName": 'Benutzername',
+      "income": 'Einnahmen',
+      "expenses": 'Ausgaben',
+      "transactionHistory": 'Transaktionsverlauf',
+      "seeAll": 'Alle anzeigen',
+      "balance": 'Gesamtguthaben',
+      "expensesMoney": '800.00',
+      "transfer": 'Überweisen',
+      "today": 'Heute',
+      "topSpending": 'Top-Ausgaben',
+      "noName": 'Kein Name',
+      "add": 'Hinzufügen',
+      "addTitle": 'Titel hinzufügen',
+      "addAmount": 'Betrag hinzufügen',
+      "name": 'Kategoriename',
+      "explain": 'Erklären Sie Ihre Transaktion',
+      "amount": 'Betrag',
+      "how": 'Wie',
+      "date": 'Datum',
+      "save": 'Speichern',
+      "isSub": 'Ist es ein Abonnement?',
 
-  static const String chooseDateCut = 'Choose last day of billing cycle: ';
-  static const String dateCut = 'Last day of billing cycle: ';
-  static const String chooseMonth = 'Choose a month';
-  static const String chooseDay = 'Choose a day';
+      // Karten
+      "nameCard": 'Name auf der Karte',
+      "numberCard": 'Kartennummer',
+      "bank": 'Bank',
+      "isCredit": 'Ist es eine Kreditkarte?',
+      "limit": 'Limit',
+      "addCard": 'Karte speichern',
+      "addCardTitle": 'Zahlung hinzufügen',
+      "nocards": 'Keine Karten registriert.',
+      "paymentMethod": 'Zahlungsmethode',
+      "paymentMethods": 'Zahlungsmethoden',
+      "choosePaymentMethod": 'Zahlungsmethode wählen',
+      "noPaymentMethod": 'Keine Zahlungsmethode',
+      "cash": 'Bar',
+      "card": 'Karte',
+      "creditAvailable": 'Verfügbarer Kredit',
+      "required": 'Erforderlich',
+      "fillAllFields": 'Bitte alle Felder ausfüllen',
+      "invalidAmount": 'Ungültiger Betrag',
+      "areYouSure": 'Sind Sie sicher?',
+      "delete": 'Löschen',
+      "statistics": 'Statistiken',
+      "cancel": 'Abbrechen',
+      "deleteCardMessage": 'Möchten Sie diese Karte wirklich löschen?',
+      "noNumber": 'Keine Nummer',
 
-  static const String select = 'Confirm';
+      // Monate
+      "enero": 'Januar',
+      "febrero": 'Februar',
+      "marzo": 'März',
+      "abril": 'April',
+      "mayo": 'Mai',
+      "junio": 'Juni',
+      "julio": 'Juli',
+      "agosto": 'August',
+      "septiembre": 'September',
+      "octubre": 'Oktober',
+      "noviembre": 'November',
+      "diciembre": 'Dezember',
 
-  static const String chooseDateLimit = 'Choose day of payment deadline: ';
-  static const String dateLimit = 'Day of payment deadline: ';
-  static const String chooseDate = 'Choose Date';
+      "chooseDateCut": 'Wählen Sie den letzten Tag des Abrechnungszeitraums:',
+      "dateCut": 'Letzter Tag des Abrechnungszeitraums:',
+      "chooseMonth": 'Monat wählen',
+      "chooseDay": 'Tag wählen',
+      "select": 'Bestätigen',
+      "chooseDateLimit": 'Wählen Sie den Zahlungstermin:',
+      "dateLimit": 'Zahlungstermin:',
+      "chooseDate": 'Datum wählen',
+      "noTransactions": 'Noch keine Transaktionen',
 
-  static const String noTransactions = 'No transactions yet';
+      "settings": 'Einstellungen',
+      "language": 'Sprache',
+      "changeUsername": 'Benutzernamen ändern',
+      "inputUsername": 'Neuen Benutzernamen eingeben',
+      "configSavedMessage": 'Einstellungen erfolgreich gespeichert',
+      "settingsLang": 'Spracheinstellungen',
+      "settingsProfile": 'Profileinstellungen',
+    },
+  };
+
+  static void setLang(String lang) {
+    _currentLang = _getLangCode(lang);
+  }
+
+  static String _getLangCode(String name) {
+    switch (name) {
+      case 'Español':
+        return 'es';
+      case 'English':
+        return 'en';
+      case 'Français':
+        return 'fr';
+      case 'Deutsch':
+        return 'de';
+      default:
+        return 'en';
+    }
+  }
+
+  static String get(String key) {
+    return _localizedValues[_currentLang]![key] ?? key;
+  }
 }

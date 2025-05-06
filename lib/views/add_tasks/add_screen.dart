@@ -90,7 +90,7 @@ class _AddScreenState extends State<AddScreen> {
               children: [
                 Row(
                   children: [
-                    Text(AppStr.isSub),
+                    Text(AppStr.get('isSub')),
                     Checkbox(
                       value: isSub,
                       onChanged: (bool? value) {
@@ -102,15 +102,15 @@ class _AddScreenState extends State<AddScreen> {
                   ],
                 ),
                 const SizedBox(height: 10),
-                const Text(
-                  AppStr.choosePaymentMethod,
+                Text(
+                  AppStr.get('choosePaymentMethod'),
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 8),
                 DropdownButton<CardData>(
                   isExpanded: true,
                   value: selectedCard,
-                  hint: const Text(AppStr.paymentMethod),
+                  hint: Text(AppStr.get('paymentMethod')),
                   items:
                       cardBox.values.map((card) {
                         return DropdownMenuItem<CardData>(
@@ -177,7 +177,7 @@ class _AddScreenState extends State<AddScreen> {
             amount_C.text.isEmpty) {
           ScaffoldMessenger.of(
             context,
-          ).showSnackBar(const SnackBar(content: Text(AppStr.fillAllFields)));
+          ).showSnackBar( SnackBar(content: Text(AppStr.get('fillAllFields'))));
           return;
         }
 
@@ -185,7 +185,7 @@ class _AddScreenState extends State<AddScreen> {
         if (amount == null) {
           ScaffoldMessenger.of(
             context,
-          ).showSnackBar(const SnackBar(content: Text(AppStr.invalidAmount)));
+          ).showSnackBar( SnackBar(content: Text(AppStr.get('invalidAmount'))));
           return;
         }
 
@@ -195,7 +195,7 @@ class _AddScreenState extends State<AddScreen> {
           amount_C.text,
           selectedItem2!,
           date,
-          selectedCard?.cardName ?? AppStr.noPaymentMethod,
+          selectedCard?.cardName ?? AppStr.get('noPaymentMethod'),
           isSub,
           selectedItem2 == 'Expense' && selectedCard?.isCredit == true ? selectedMeses : 1,
         );
@@ -230,7 +230,7 @@ class _AddScreenState extends State<AddScreen> {
           borderRadius: BorderRadius.circular(10),
         ),
         child: Text(
-          AppStr.save,
+          AppStr.get('save'),
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.w600,
@@ -263,7 +263,7 @@ class _AddScreenState extends State<AddScreen> {
           });
         },
         child: Text(
-          '${AppStr.date} : ${date.day}/${date.month}/${date.year}',
+          '${AppStr.get('date')} : ${date.day}/${date.month}/${date.year}',
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,
@@ -284,7 +284,7 @@ class _AddScreenState extends State<AddScreen> {
           controller: expalin_C,
           decoration: InputDecoration(
             contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-            labelText: AppStr.explain,
+            labelText: AppStr.get('explain'),
             labelStyle: TextStyle(
               fontSize: 17,
               fontWeight: FontWeight.w600,
@@ -321,7 +321,7 @@ class _AddScreenState extends State<AddScreen> {
           controller: amount_C,
           decoration: InputDecoration(
             contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-            labelText: AppStr.amount,
+            labelText: AppStr.get('amount'),
             labelStyle: TextStyle(
               fontSize: 17,
               fontWeight: FontWeight.w600,
@@ -412,7 +412,7 @@ class _AddScreenState extends State<AddScreen> {
                       )
                       .toList(),
           hint: Text(
-            AppStr.name,
+            AppStr.get('name'),
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w600,
@@ -495,7 +495,7 @@ class _AddScreenState extends State<AddScreen> {
                       )
                       .toList(),
           hint: Text(
-            AppStr.how,
+            AppStr.get('how'),
             style: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w600,

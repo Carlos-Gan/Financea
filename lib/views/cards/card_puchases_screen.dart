@@ -24,7 +24,7 @@ class CardPurchasesScreen extends StatelessWidget {
         backgroundColor: AppColors.secondaryColor,
       ),
       body: purchases.isEmpty
-          ? const Center(child: Text(AppStr.noTransactions))
+          ?  Center(child: Text(AppStr.get('noTransactions')))
           : ListView.builder(
               itemCount: purchases.length,
               itemBuilder: (context, index) {
