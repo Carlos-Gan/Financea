@@ -14,13 +14,13 @@ class StatisticsView extends StatefulWidget {
 }
 
 class _StatisticsViewState extends State<StatisticsView> {
-  static const tabs = ['Day', 'Week', 'Month', 'Year'];
   int currentIndex = 0;
   bool showExpenses = true;
 
   @override
   Widget build(BuildContext context) {
     // Obtener datos según la pestaña seleccionada
+    var tabs = [AppStr.get('day'),AppStr.get('week'), AppStr.get('month'), AppStr.get('year')];
     List<AddData> rawData;
     switch (currentIndex) {
       case 1:

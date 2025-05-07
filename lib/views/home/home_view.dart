@@ -9,6 +9,7 @@ import 'package:financea/views/home/widget/expenses_widget.dart';
 import 'package:financea/views/home/widget/income_widget.dart';
 import 'package:financea/views/home/widget/welcome_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:intl/intl.dart';
 
@@ -21,53 +22,59 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: ValueListenableBuilder(
-          valueListenable: box.listenable(),
-          builder: (context, value, child) {
-            return Column(
-              children: [
-                SizedBox(height: 300, child: _head(context)),
-                Padding(
-                  padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        AppStr.get('transactionHistory'),
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black,
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle(
+        statusBarColor: AppColors.secondaryColor,
+        statusBarIconBrightness: Brightness.light,
+      ),
+      child: Scaffold(
+        body: SafeArea(
+          child: ValueListenableBuilder(
+            valueListenable: box.listenable(),
+            builder: (context, value, child) {
+              return Column(
+                children: [
+                  SizedBox(height: 300, child: _head(context)),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          AppStr.get('transactionHistory'),
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black,
+                          ),
                         ),
-                      ),
-                      Text(
-                        AppStr.get('seeAll'),
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.secondaryColorDark,
+                        Text(
+                          AppStr.get('seeAll'),
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.secondaryColorDark,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                Expanded(
-                  child: CustomScrollView(
-                    slivers: [
-                      SliverList(
-                        delegate: SliverChildBuilderDelegate((context, index) {
-                          history = box.values.toList()[index];
-                          return getList(history, index);
-                        }, childCount: box.length),
-                      ),
-                    ],
+                  Expanded(
+                    child: CustomScrollView(
+                      slivers: [
+                        SliverList(
+                          delegate: SliverChildBuilderDelegate((context, index) {
+                            history = box.values.toList()[index];
+                            return getList(history, index);
+                          }, childCount: box.length),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            );
-          },
+                ],
+              );
+            },
+          ),
         ),
       ),
     );
@@ -122,7 +129,7 @@ class HomeView extends StatelessWidget {
           ),
           if (history.IN == 'Expense' && history.meses > 1)
             Text(
-              'A ${history.meses} meses',
+              '${AppStr.get('For')} ${history.meses} ${AppStr.get('months')}',
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w500,

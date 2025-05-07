@@ -40,7 +40,8 @@ class _CardsViewState extends State<CardsView> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppStr.get('paymentMethods')),
+        title: Text(AppStr.get('paymentMethods'), 
+        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold) ,),
         centerTitle: true,
         backgroundColor: AppColors.secondaryColor,
       ),
@@ -229,7 +230,7 @@ class _CardsViewState extends State<CardsView> {
                                     ); // Refrescar la vista después de editar
                                   },
                                   icon: const Icon(Icons.edit),
-                                  label: const Text("Editar"),
+                                  label: Text(AppStr.get('editar')),
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: AppColors.secondaryColor,
                                   ),
@@ -247,7 +248,7 @@ class _CardsViewState extends State<CardsView> {
                                     );
                                   },
                                   icon: const Icon(Icons.receipt_long),
-                                  label: const Text("Ver compras"),
+                                  label: Text(AppStr.get('PurchasesButton')),
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.blueGrey,
                                   ),

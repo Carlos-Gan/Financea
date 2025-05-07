@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 import 'package:financea/model/card/card_data.dart';
 import 'package:financea/utils/app_colors.dart';
@@ -79,7 +80,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
 
   AlertDialog dialogoFechas(BuildContext context) {
     return AlertDialog(
-      title: Text(AppStr.get('getchooseDateCut')),
+      title: Text(AppStr.get('chooseDateCut')),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -90,7 +91,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
                 children: [
                   DropdownButton<String>(
                     value: selectedMonthCorte,
-                    hint: Text(AppStr.get('getchooseMonth')),
+                    hint: Text(AppStr.get('chooseMonth')),
                     onChanged: (String? newMonth) {
                       setDialogState(() {
                         selectedMonthCorte = newMonth;
@@ -109,7 +110,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
                   ),
                   DropdownButton<int>(
                     value: selectedDayCorte,
-                    hint: Text(AppStr.get('getchooseDay')),
+                    hint: Text(AppStr.get('chooseDay')),
                     onChanged: (int? newDay) {
                       setDialogState(() {
                         selectedDayCorte = newDay;
@@ -151,11 +152,11 @@ class _AddCardScreenState extends State<AddCardScreen> {
               Navigator.pop(context);
             }
           },
-          child:  Text(AppStr.get('getselect')),
+          child: Text(AppStr.get('select')),
         ),
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child:  Text(AppStr.get('getcancel')),
+          child: Text(AppStr.get('cancel')),
         ),
       ],
     );
@@ -167,7 +168,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title:  Text(AppStr.get('getchooseDateLimit')),
+          title: Text(AppStr.get('chooseDateLimit')),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -178,7 +179,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
                     children: [
                       DropdownButton<String>(
                         value: selectedMonthLimite,
-                        hint: Text(AppStr.get('getchooseMonth')),
+                        hint: Text(AppStr.get('chooseMonth')),
                         onChanged: (String? newMonth) {
                           setDialogState(() {
                             selectedMonthLimite = newMonth;
@@ -197,7 +198,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
                       ),
                       DropdownButton<int>(
                         value: selectedDayLimite,
-                        hint:  Text(AppStr.get('getchooseDay')),
+                        hint: Text(AppStr.get('chooseDay')),
                         onChanged: (int? newDay) {
                           setDialogState(() {
                             selectedDayLimite = newDay;
@@ -239,11 +240,11 @@ class _AddCardScreenState extends State<AddCardScreen> {
                   Navigator.pop(context);
                 }
               },
-              child:  Text(AppStr.get('getselect')),
+              child: Text(AppStr.get('select')),
             ),
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child:  Text(AppStr.get('getcancel')),
+              child: Text(AppStr.get('cancel')),
             ),
           ],
         );
@@ -251,157 +252,199 @@ class _AddCardScreenState extends State<AddCardScreen> {
     );
   }
 
+  void _onSubmit() {
+    if (selectedPayment == PaymentType.card &&
+        !_formKey.currentState!.validate()) {
+      return;
+    }
+
+    final card = CardData(
+      selectedPayment == PaymentType.cash
+          ? AppStr.get('cash')
+          : nameController.text,
+      selectedPayment == PaymentType.cash ? null : numberController.text,
+      selectedPayment == PaymentType.cash ? 'N/A' : bankController.text,
+      selectedPayment == PaymentType.cash ? false : isCredit,
+      selectedPayment == PaymentType.cash || !isCredit
+          ? null
+          : double.tryParse(limitController.text),
+      selectedPayment == PaymentType.cash || !isCredit
+          ? 0.0
+          : widget.editCard?.currentBalance ?? 0.0,
+      selectedPayment == PaymentType.cash || !isCredit ? null : limitDate,
+      selectedPayment == PaymentType.cash || !isCredit ? null : corteFecha,
+    );
+
+    final box = Hive.box<CardData>('cardData');
+    if (widget.editCard != null) {
+      final index = box.values.toList().indexOf(widget.editCard!);
+      box.putAt(index, card);
+    } else {
+      box.add(card);
+    }
+
+    Navigator.pop(context);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title:  Text(AppStr.get('getaddCardTitle')),
-        backgroundColor: AppColors.secondaryColor,
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle(
+        statusBarColor: AppColors.secondaryColorDark,
+        statusBarIconBrightness: Brightness.light,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Form(
-          key: _formKey,
-          child: ListView(
-            children: [
-              // Tipo de método de pago
-               Text(
-                AppStr.get('getpaymentMethod'),
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              metodoPago(),
-
-              const SizedBox(height: 12),
-              // Campos si se selecciona Tarjeta
-              if (selectedPayment == PaymentType.card) ...[
-                TextFormField(
-                  controller: nameController,
-                  decoration:  InputDecoration(labelText: AppStr.get('getnameCard')),
-                  validator: (value) => value!.isEmpty ? AppStr.get('getrequired') : null,
-                ),
-                TextFormField(
-                  controller: numberController,
-                  decoration:  InputDecoration(
-                    labelText: AppStr.get('getnumberCard'),
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          iconTheme: const IconThemeData(color: Colors.white),
+          centerTitle: true,
+          title: Text(
+            AppStr.get('addCardTitle'),
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          ),
+          backgroundColor: AppColors.secondaryColorDark,
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Form(
+            key: _formKey,
+            child: ListView(
+              children: [
+                const SizedBox(height: 10),
+                Text(
+                  AppStr.get('paymentMethod'),
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                    color: AppColors.secondaryColorDark,
                   ),
-                  keyboardType: TextInputType.number,
                 ),
-                TextFormField(
-                  controller: bankController,
-                  decoration:  InputDecoration(labelText: AppStr.get('getbank')),
+                const SizedBox(height: 8),
+                Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  elevation: 2,
+                  child: metodoPago(),
                 ),
-                SwitchListTile(
-                  title:  Text(AppStr.get('getisCredit')),
-                  value: isCredit,
-                  onChanged: (val) => setState(() => isCredit = val),
-                ),
-                if (isCredit) ...[
-                  //Limite de tarjeta de credito
+
+                const SizedBox(height: 20),
+                if (selectedPayment == PaymentType.card) ...[
                   TextFormField(
-                    controller: limitController,
-                    decoration:  InputDecoration(labelText: AppStr.get('getlimit')),
+                    controller: nameController,
+                    decoration: InputDecoration(
+                      filled: true,
+                      labelText: AppStr.get('nameCard'),
+                      prefixIcon: Icon(Icons.credit_card),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    validator:
+                        (value) =>
+                            value!.isEmpty ? AppStr.get('required') : null,
+                  ),
+                  const SizedBox(height: 12),
+                  TextFormField(
+                    controller: numberController,
+                    decoration: InputDecoration(
+                      filled: true,
+                      labelText: AppStr.get('numberCard'),
+                      prefixIcon: Icon(Icons.numbers),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
                     keyboardType: TextInputType.number,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                       Text(AppStr.get('getdateLimit')),
-                      Row(
-                        children: [
-                          Text(
-                            limitDate != null
-                                ? '${limitDate!.day}/${limitDate!.month}'
-                                : selectedDayLimite != null &&
-                                    selectedMonthLimite != null
-                                ? '$selectedDayLimite/${months.indexOf(selectedMonthLimite!) + 1}'
-                                : AppStr.get('getchooseDate'),
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.calendar_today),
-                            onPressed: () => _selectLimiteDate(context),
-                          ),
-                        ],
+                  const SizedBox(height: 12),
+                  TextFormField(
+                    controller: bankController,
+                    decoration: InputDecoration(
+                      filled: true,
+                      labelText: AppStr.get('bank'),
+                      prefixIcon: Icon(Icons.account_balance),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                    ],
+                    ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(AppStr.get('getdateCut')),
-                      Row(
-                        children: [
-                          Text(
-                            corteFecha != null
-                                ? '${corteFecha!.day}/${corteFecha!.month}'
-                                : selectedDayCorte != null &&
-                                    selectedMonthCorte != null
-                                ? '$selectedDayCorte/${months.indexOf(selectedMonthCorte!) + 1}'
-                                : AppStr.get('getchooseDate'),
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.calendar_today),
-                            onPressed: () => _selectCorteDate(context),
-                          ),
-                        ],
+                  const SizedBox(height: 12),
+                  SwitchListTile(
+                    title: Text(AppStr.get('isCredit')),
+                    value: isCredit,
+                    activeColor: AppColors.secondaryColorDark,
+                    onChanged: (val) => setState(() => isCredit = val),
+                  ),
+                  if (isCredit) ...[
+                    TextFormField(
+                      controller: limitController,
+                      decoration: InputDecoration(
+                        filled: true,
+                        labelText: AppStr.get('limit'),
+                        prefixIcon: Icon(Icons.attach_money),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                       ),
-                    ],
-                  ),
+                      keyboardType: TextInputType.number,
+                    ),
+                    const SizedBox(height: 12),
+                    Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      elevation: 1,
+                      child: ListTile(
+                        title: Text(AppStr.get('dateLimit')),
+                        subtitle: Text(
+                          limitDate != null
+                              ? '${limitDate!.day}/${limitDate!.month}'
+                              : AppStr.get('chooseDate'),
+                        ),
+                        trailing: Icon(Icons.calendar_today),
+                        onTap: () => _selectLimiteDate(context),
+                      ),
+                    ),
+                    Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      elevation: 1,
+                      child: ListTile(
+                        title: Text(AppStr.get('dateCut')),
+                        subtitle: Text(
+                          corteFecha != null
+                              ? '${corteFecha!.day}/${corteFecha!.month}'
+                              : AppStr.get('chooseDate'),
+                        ),
+                        trailing: Icon(Icons.calendar_today),
+                        onTap: () => _selectCorteDate(context),
+                      ),
+                    ),
+                  ],
                 ],
+
+                const SizedBox(height: 24),
+                ElevatedButton.icon(
+                  onPressed: _onSubmit,
+                  icon: Icon(Icons.save),
+                  label: Text(AppStr.get('addCard')),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.secondaryColorDark,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    textStyle: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
               ],
-
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  if (selectedPayment == PaymentType.card &&
-                      !_formKey.currentState!.validate()) {
-                    return;
-                  }
-
-                  final card = CardData(
-                    selectedPayment == PaymentType.cash
-                        ? AppStr.get('getcash')
-                        : nameController.text,
-                    selectedPayment == PaymentType.cash
-                        ? null
-                        : numberController.text,
-                    selectedPayment == PaymentType.cash
-                        ? 'N/A'
-                        : bankController.text,
-                    selectedPayment == PaymentType.cash ? false : isCredit,
-                    selectedPayment == PaymentType.cash || !isCredit
-                        ? null
-                        : double.tryParse(limitController.text),
-                    selectedPayment == PaymentType.cash || !isCredit
-                        ? 0.0
-                        : widget.editCard?.currentBalance ?? 0.0,
-                    selectedPayment == PaymentType.cash || !isCredit
-                        ? null
-                        : limitDate,
-                    selectedPayment == PaymentType.cash || !isCredit
-                        ? null
-                        : corteFecha,
-                  );
-
-                  if (widget.editCard != null) {
-                    final cardBox = Hive.box<CardData>('cardData');
-                    final index = cardBox.values.toList().indexOf(
-                      widget.editCard!,
-                    ); // Encontramos el índice de la tarjeta que estamos editando
-                    cardBox.putAt(
-                      index,
-                      card,
-                    ); // Actualizamos la tarjeta existente
-                  } else {
-                    // Si no estamos editando, agregamos la tarjeta como nueva
-                    Hive.box<CardData>('cardData').add(card);
-                  }
-
-                  Navigator.pop(context);
-                },
-                child: Text(AppStr.get('getaddCard')),
-              ),
-            ],
+            ),
           ),
         ),
       ),
@@ -412,13 +455,13 @@ class _AddCardScreenState extends State<AddCardScreen> {
     return Column(
       children: [
         RadioListTile<PaymentType>(
-          title:  Text(AppStr.get('getcard')),
+          title: Text(AppStr.get('card')),
           value: PaymentType.card,
           groupValue: selectedPayment,
           onChanged: (value) => setState(() => selectedPayment = value!),
         ),
         RadioListTile<PaymentType>(
-          title:  Text(AppStr.get('getcash')),
+          title: Text(AppStr.get('cash')),
           value: PaymentType.cash,
           groupValue: selectedPayment,
           onChanged: (value) => setState(() => selectedPayment = value!),

@@ -1,21 +1,29 @@
 import 'package:financea/model/card/card_data.dart';
 import 'package:financea/model/datas/add_data.dart';
-import 'package:financea/views/settings/settings_screen.dart';
+import 'package:financea/utils/user_settings.dart';
+import 'package:financea/views/new_user/new_user_screen.dart';
 import 'package:financea/views/widgets/bottomnavbar.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  
   await Hive.initFlutter();
   Hive.registerAdapter(AddDataAdapter());
   Hive.registerAdapter(CardDataAdapter());
   await Hive.openBox<AddData>('data');
   await Hive.openBox<CardData>('cardData');
 
+  // Initialize UserSettings early to avoid any initialization issues
+  final userSettings = UserSettings();
+  await userSettings.loadPreferences();
+  
   runApp(
     ChangeNotifierProvider(
-      create: (_) => UserSettings(),
+      create: (_) => userSettings,
       child: const MainApp(),
     ),
   );
@@ -26,9 +34,27 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: const BottomNavBar(),
+    return FutureBuilder(
+      future: _checkFirstTimeUser(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const MaterialApp(
+            home: Scaffold(body: Center(child: CircularProgressIndicator())),
+          );
+        }
+        
+        bool isFirstTime = snapshot.data ?? true;
+        
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          home: isFirstTime ? const NewUserScreen() : const BottomNavBar(),
+        );
+      },
     );
+  }
+
+  Future<bool> _checkFirstTimeUser() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool('isFirstTime') ?? true;
   }
 }
