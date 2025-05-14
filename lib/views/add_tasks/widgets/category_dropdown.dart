@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hive/hive.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class CategoryDropdown extends StatefulWidget {
   final String? selectedCategory;
@@ -16,15 +17,16 @@ class CategoryDropdown extends StatefulWidget {
   final Color dropdownColor;
 
   const CategoryDropdown({
-    Key? key,
+    super.key,
     required this.onChanged,
     required this.hintText,
-    this.selectedCategory,
+    required this.selectedCategory,
     this.textStyle,
     this.dropdownColor = Colors.white,
-  }) : super(key: key);
+  });
 
   @override
+  // ignore: library_private_types_in_public_api
   _CategoryDropdownState createState() => _CategoryDropdownState();
 }
 
@@ -33,23 +35,17 @@ class _CategoryDropdownState extends State<CategoryDropdown> {
   final TextEditingController _newCategoryController = TextEditingController();
   String? _selectedCategory;
 
-  // Mapeo de categorías a íconos
-  final Map<String, IconData> _categoryIcons = {
-    'Food': Icons.restaurant,
-    'Transport': Icons.directions_car,
-    'Education': Icons.school,
-    'Shopping': Icons.shopping_cart,
-    'Bills': Icons.receipt,
-    'Health': Icons.medical_services,
-    'Entertainment': Icons.movie,
-    'Other': Icons.category,
-  };
-
   @override
   void initState() {
     super.initState();
     _selectedCategory = widget.selectedCategory;
     _initializeCategories();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    setState(() {});
   }
 
   Future<void> _initializeCategories() async {
@@ -326,38 +322,6 @@ class _CategoryDropdownState extends State<CategoryDropdown> {
     );
   }
 
-  // Obtener ícono basado en el nombre de la categoría
-  IconData _getIconForCategory(String categoryName) {
-    try {
-      return _categoryIcons[categoryName] ?? Icons.category;
-    } catch (e) {
-      // Manejo de errores si es necesario
-      log("Error getting icon for category: $e");
-      return Icons.category;
-    }
-  }
-
-  // Obtener color basado en el nombre de la categoría
-  Color _getColorForCategory(String categoryName) {
-    try {
-      return categoryBox.values
-          .firstWhere(
-            (category) => category.name == categoryName,
-            orElse:
-                () => Category(
-                  name: 'Other',
-                  icon: Icons.category,
-                  color: Colors.grey,
-                ),
-          )
-          .color;
-    } catch (e) {
-      // Manejo de error al obtener el color
-      print("Error al obtener el color para la categoría $categoryName: $e");
-      return Colors.grey;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -369,108 +333,98 @@ class _CategoryDropdownState extends State<CategoryDropdown> {
           borderRadius: BorderRadius.circular(10),
           border: Border.all(width: 2, color: Colors.grey[300]!),
         ),
-        child: DropdownButton<String>(
-          value: _selectedCategory,
-          onChanged: (value) {
-            if (value == 'add_new') {
-              _showAddCategoryDialog();
-            } else {
-              setState(() => _selectedCategory = value);
-              widget.onChanged(value);
-            }
-          },
-          items: [
-            ...categoryBox.values.map((category) {
-              return DropdownMenuItem<String>(
-                value: category.name,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Icon(
-                        category.icon,
-                        size: 30,
-                        color: category.color,
+        child: ValueListenableBuilder(
+          valueListenable: categoryBox.listenable(),
+          builder: (context, Box<Category> box, _) {
+            final categories = box.values.toList();
+            return DropdownButton<String>(
+              value: _selectedCategory,
+              onChanged: (value) {
+                if (value == 'add_new') {
+                  _showAddCategoryDialog();
+                } else {
+                  setState(() {
+                    _selectedCategory = value;
+                    widget.onChanged(value);
+                  });
+                }
+              },
+              items: [
+                ...categories.map((category) {
+                  return DropdownMenuItem<String>(
+                    value: category.name,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Row(
+                        children: [
+                          Icon(category.icon, color: category.color),
+                          const SizedBox(width: 10),
+                          Text(category.name, style: widget.textStyle),
+                        ],
                       ),
-                      const SizedBox(width: 30),
+                    ),
+                  );
+                }),
+                DropdownMenuItem<String>(
+                  value: 'add_new',
+                  child: Row(
+                    children: [
+                      const Icon(Icons.add, size: 30, color: Colors.blue),
+                      const SizedBox(width: 10),
                       Text(
-                        category.name,
-                        style:
-                            widget.textStyle ??
-                            const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.black,
-                            ),
+                        AppStr.get('addCategory'),
+                        style: (widget.textStyle ?? const TextStyle()).copyWith(
+                          color: Colors.blue,
+                        ),
                       ),
                     ],
                   ),
                 ),
-              );
-            }).toList(),
-            DropdownMenuItem<String>(
-              value: 'add_new',
-              child: Row(
-                children: [
-                  const Icon(Icons.add, size: 30, color: Colors.blue),
-                  const SizedBox(width: 10),
-                  Text(
-                    AppStr.get('addCategory'),
-                    style: (widget.textStyle ?? const TextStyle()).copyWith(
-                      color: Colors.blue,
-                    ),
+              ],
+              selectedItemBuilder: (context) {
+                return [
+                  ...categories.map((category) {
+                    return Row(
+                      children: [
+                        Icon(category.icon, size: 32, color: category.color),
+                        const SizedBox(width: 10),
+                        Text(
+                          category.name,
+                          style:
+                              widget.textStyle ??
+                              const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black,
+                              ),
+                        ),
+                      ],
+                    );
+                  }),
+                  Row(
+                    children: [
+                      const Icon(Icons.add, size: 32, color: Colors.blue),
+                      const SizedBox(width: 10),
+                      Text(AppStr.get('addCategory')),
+                    ],
                   ),
-                ],
-              ),
-            ),
-          ],
-          selectedItemBuilder: (context) {
-            return [
-              ...categoryBox.values.map((category) {
-                return Row(
-                  children: [
-                    Icon(
-                      category.icon,
-                      size: 32,
-                      color: category.color,
+                ];
+              },
+              hint: Text(
+                widget.hintText,
+                style:
+                    widget.textStyle ??
+                    const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black,
                     ),
-                    const SizedBox(width: 10),
-                    Text(
-                      category.name,
-                      style:
-                          widget.textStyle ??
-                          const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black,
-                          ),
-                    ),
-                  ],
-                );
-              }).toList(),
-              Row(
-                children: [
-                  const Icon(Icons.add, size: 32, color: Colors.blue),
-                  const SizedBox(width: 10),
-                  Text(AppStr.get('addCategory')),
-                ],
               ),
-            ];
+              dropdownColor: widget.dropdownColor,
+              isExpanded: true,
+              underline: Container(),
+            );
           },
-          hint: Text(
-            widget.hintText,
-            style:
-                widget.textStyle ??
-                const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black,
-                ),
-          ),
-          dropdownColor: widget.dropdownColor,
-          isExpanded: true,
-          underline: Container(),
         ),
       ),
     );

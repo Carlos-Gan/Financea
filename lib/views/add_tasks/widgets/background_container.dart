@@ -4,9 +4,14 @@ import 'package:financea/views/add_tasks/categories_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class BackgroundContainer extends StatelessWidget {
+class BackgroundContainer extends StatefulWidget {
   const BackgroundContainer({super.key});
 
+  @override
+  State<BackgroundContainer> createState() => _BackgroundContainerState();
+}
+
+class _BackgroundContainerState extends State<BackgroundContainer> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -23,7 +28,7 @@ class BackgroundContainer extends StatelessWidget {
           ),
           child: Column(
             children: [
-              SizedBox(height: 40),
+              const SizedBox(height: 40),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15.0),
                 child: Row(
@@ -33,28 +38,30 @@ class BackgroundContainer extends StatelessWidget {
                       onTap: () {
                         Navigator.of(context).pop();
                       },
-                      child: Icon(
+                      child: const Icon(
                         FontAwesomeIcons.arrowLeft,
                         color: Colors.white,
                       ),
                     ),
                     Text(
                       AppStr.get('add'),
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                       ),
                     ),
                     GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).push(
+                      onTap: () async {
+                        await Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (context) => const ManageCategoriesScreen(),
+                            builder:
+                                (context) => const ManageCategoriesScreen(),
                           ),
                         );
+                        setState(() {});
                       },
-                      child: Icon(
+                      child: const Icon(
                         FontAwesomeIcons.paperclip,
                         color: Colors.white,
                       ),

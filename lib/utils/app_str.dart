@@ -90,6 +90,14 @@ class AppStr {
       'add_new': 'Add New',
       'name_category': 'Category Name',
       'addCategory': 'Add New Category',
+      'editarCategory': 'Edit Category',  
+      'selectColor': 'Select Color',
+      'changeColor': 'Change Color',
+      'listo': 'Done',
+      // Nueva clave añadida
+      'eliminarCategoria': 'Delete Category?',
+      'noSePuedeDeshacer': 'This acion cannot undo',
+      'administrarCategory': 'Manage Categories', // Nueva clave añadida
     },
     'es': {
       "goodAfternoon": 'Buenas tardes',
@@ -180,6 +188,13 @@ class AppStr {
       'add_new': 'Agregar nueva categoria',
       'name_category': 'Nombre de la categoria',
       'addCategory': 'Agregar nueva categoría',
+      'editarCategory': 'Editar categoría', // Nueva clave añadida
+      'selectColor': 'Seleccionar color',
+      'changeColor': 'Cambiar color',
+      'listo': 'Listo',
+      'eliminarCategoria': 'Eliminar categoría?', // Nueva clave añadida
+      'noSePuedeDeshacer': 'Esta acción no se puede deshacer', // Nueva clave añadida
+      'administrarCategory': 'Administrar Categorías', // Nueva clave añadida
     },
     'fr': {
       "goodAfternoon": 'Bon après-midi',
@@ -274,6 +289,13 @@ class AppStr {
       'add_new': 'Ajouter nouveau',
       'name_category': 'Nom de la catégorie',
       'addCategory': 'Ajouter une nouvelle catégorie',
+      'editarCategory': 'Éditer la catégorie', // Nouvelle clé ajoutée
+      'selectColor': 'Sélectionner une couleur',
+      'changeColor': 'Changer la couleur',
+      'listo': 'Fait',
+      'eliminarCategoria': 'Supprimer la catégorie ?', // Nouvelle clé ajoutée
+      'noSePuedeDeshacer': 'Cette action ne peut pas être annulée', // Nueva clave añadida
+      'administrarCategory': 'Gérer les catégories', // Nueva clave añadida
     },
     'de': {
       "goodAfternoon": 'Guten Nachmittag',
@@ -368,6 +390,13 @@ class AppStr {
       'add_new': 'Neu hinzufügen',
       'name_category': 'Kategoriename',
       'addCategory': 'Neue Kategorie hinzufügen',
+      'editarCategory': 'Kategorie bearbeiten', // Nueva clave añadida
+      'selectColor': 'Farbe auswählen',
+      'changeColor': 'Farbe ändern',
+      'listo': 'Fertig',
+      'eliminarCategoria': 'Kategorie löschen?', // Nueva clave añadida
+      'noSePuedeDeshacer': 'Diese Aktion kann nicht rückgängig gemacht werden', // Nueva clave añadida
+      'administrarCategory': 'Kategorien verwalten', // Nueva clave añadida
     },
   };
 
