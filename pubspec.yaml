@@ -63,6 +63,8 @@ flutter:
     - assets/uber.png
     - assets/steam.png
     - assets/mcdonalds.png
+    - assets/financea_icon.png
+
 
     #Imagenes de la app
     - img/Education.png
@@ -71,3 +73,13 @@ flutter:
     - img/Transport.png
     - img/Income.png
     - img/Expense.png
+
+flutter_native_splash:
+  color: '#260073'
+  image: assets/financea_icon.png
+  android: true
+  ios: true
+  web: false
+
+  android_gravity: center
+  ios_content_mode: center
