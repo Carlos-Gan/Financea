@@ -1,5 +1,6 @@
 import 'package:financea/model/card/card_data.dart';
 import 'package:financea/model/datas/add_data.dart';
+import 'package:financea/utils/app_str.dart';
 import 'package:financea/utils/user_settings.dart';
 import 'package:financea/views/new_user/new_user_screen.dart';
 import 'package:financea/views/widgets/bottomnavbar.dart';
@@ -20,7 +21,9 @@ void main() async {
   // Initialize UserSettings early to avoid any initialization issues
   final userSettings = UserSettings();
   await userSettings.loadPreferences();
-  
+
+  AppStr.setLang(userSettings.selectedLanguage);
+
   runApp(
     ChangeNotifierProvider(
       create: (_) => userSettings,

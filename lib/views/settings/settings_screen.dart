@@ -15,6 +15,14 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   final List<String> _languages = ['English', 'Español', 'Français', 'Deutsch'];
 
+  String? _tempSectLang;
+  @override
+  void initState() {
+    super.initState();
+    final settings = Provider.of<UserSettings>(context, listen: false);
+    _tempSectLang = settings.selectedLanguage;
+  }
+
   @override
   Widget build(BuildContext context) {
     // Use Consumer pattern for more reliable provider access
@@ -142,7 +150,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
                 const SizedBox(height: 8),
                 DropdownButtonFormField<String>(
-                  value: settings.selectedLanguage,
+                  value: _tempSectLang,
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -162,10 +170,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         );
                       }).toList(),
                   onChanged: (String? newValue) async {
-                    if (newValue != null) {
-                      await settings.setLanguage(newValue);
-                      AppStr.setLang(newValue);
-                    }
+                    setState(() {
+                      _tempSectLang = newValue;
+                    });
                   },
                 ),
               ],
@@ -181,7 +188,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
       width: double.infinity,
       child: ElevatedButton.icon(
         icon: const Icon(Icons.save, color: Colors.white),
-        onPressed: () {
+        onPressed: () async {
+          final settings = Provider.of<UserSettings>(context, listen: false);
+          if (_tempSectLang != null &&
+              _tempSectLang != settings.selectedLanguage) {
+            await settings.setLanguage(_tempSectLang!);
+            AppStr.setLang(_tempSectLang!);
+          }
+          // ignore: use_build_context_synchronously
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(AppStr.get('configSavedMessage')),
@@ -189,6 +203,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               duration: const Duration(seconds: 2),
             ),
           );
+          setState(() {});
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.secondaryColor,
@@ -209,7 +224,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     await showDialog(
       context: context,
       builder: (context) {
-        final TextEditingController _usernameController = TextEditingController(
+        final TextEditingController usernameController = TextEditingController(
           text: Provider.of<UserSettings>(context, listen: false).username,
         );
 
@@ -225,7 +240,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
           ),
           content: TextField(
-            controller: _usernameController,
+            controller: usernameController,
             autofocus: true,
             decoration: InputDecoration(
               hintText: AppStr.get("inputUsername"),
@@ -269,11 +284,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
               ),
               onPressed: () async {
-                if (_usernameController.text.trim().isNotEmpty) {
+                if (usernameController.text.trim().isNotEmpty) {
                   await Provider.of<UserSettings>(
                     context,
                     listen: false,
-                  ).setUsername(_usernameController.text.trim());
+                  ).setUsername(usernameController.text.trim());
+                  // ignore: use_build_context_synchronously
                   if (mounted) Navigator.pop(context);
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
