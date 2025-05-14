@@ -19,15 +19,18 @@ class _CardDetailScreenState extends State<CardDetailScreen> {
   int selectedMonths = 1;
 
   void _calculateInterest() {
-    if (widget.card.isCredit && widget.card.currentBalance != null && widget.card.currentBalance! > 0) {
+    if (widget.card.isCredit &&
+        widget.card.currentBalance != null &&
+        widget.card.currentBalance! > 0) {
       final interestRate = double.tryParse(_interestController.text) ?? 25.0;
       final monthlyRate = interestRate / 100 / 12;
-      final interest = widget.card.currentBalance! * monthlyRate * selectedMonths;
-      
+      final interest =
+          widget.card.currentBalance! * monthlyRate * selectedMonths;
+
       setState(() {
         calculatedInterest = interest;
       });
-      
+
       _showInterestDialog();
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -38,81 +41,93 @@ class _CardDetailScreenState extends State<CardDetailScreen> {
       );
     }
   }
-  
+
   void _showInterestDialog() {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Cálculo de Intereses'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Si no pagas tu saldo actual de ${moneyFormat.format(widget.card.currentBalance)} en $selectedMonths ${selectedMonths == 1 ? 'mes' : 'meses'}:'),
-            const SizedBox(height: 16),
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Colors.red.shade50,
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: Colors.red.shade200),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Intereses generados:',
-                    style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red.shade700),
+      builder:
+          (context) => AlertDialog(
+            title: const Text('Cálculo de Intereses'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Si no pagas tu saldo actual de ${moneyFormat.format(widget.card.currentBalance)} en $selectedMonths ${selectedMonths == 1 ? 'mes' : 'meses'}:',
+                ),
+                const SizedBox(height: 16),
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: Colors.red.shade50,
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: Colors.red.shade200),
                   ),
-                  Text(
-                    moneyFormat.format(calculatedInterest),
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.red.shade700,
-                    ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Intereses generados:',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.red.shade700,
+                        ),
+                      ),
+                      Text(
+                        moneyFormat.format(calculatedInterest),
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.red.shade700,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Total a pagar:',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.red.shade700,
+                        ),
+                      ),
+                      Text(
+                        moneyFormat.format(
+                          (widget.card.currentBalance ?? 0) +
+                              (calculatedInterest ?? 0),
+                        ),
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.red.shade700,
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'Total a pagar:',
-                    style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red.shade700),
-                  ),
-                  Text(
-                    moneyFormat.format((widget.card.currentBalance ?? 0) + (calculatedInterest ?? 0)),
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.red.shade700,
-                    ),
-                  ),
-                ],
-              ),
+                ),
+                const SizedBox(height: 16),
+                const Text(
+                  'Nota: Este cálculo es estimado y puede variar según las políticas específicas de tu banco.',
+                  style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic),
+                ),
+              ],
             ),
-            const SizedBox(height: 16),
-            const Text(
-              'Nota: Este cálculo es estimado y puede variar según las políticas específicas de tu banco.',
-              style: TextStyle(fontSize: 12, fontStyle: FontStyle.italic),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cerrar'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Cerrar'),
+              ),
+            ],
           ),
-        ],
-      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
-    
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Detalles de la Tarjeta'),
-        backgroundColor: AppColors.secondaryColor,
+        backgroundColor: AppColors.primaryColor(context),
         elevation: 0,
       ),
       body: SingleChildScrollView(
@@ -128,9 +143,10 @@ class _CardDetailScreenState extends State<CardDetailScreen> {
                 gradient: LinearGradient(
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
-                  colors: widget.card.isCredit 
-                    ? [Colors.deepPurple, Colors.purple.shade900] 
-                    : [Colors.blue.shade700, Colors.blue.shade900],
+                  colors:
+                      widget.card.isCredit
+                          ? [Colors.deepPurple, Colors.purple.shade900]
+                          : [Colors.blue.shade700, Colors.blue.shade900],
                 ),
                 borderRadius: BorderRadius.circular(20),
                 boxShadow: [
@@ -170,11 +186,12 @@ class _CardDetailScreenState extends State<CardDetailScreen> {
                   ),
                   const SizedBox(height: 30),
                   Text(
-                    widget.card.cardNumber != null && widget.card.cardNumber!.isNotEmpty
+                    widget.card.cardNumber != null &&
+                            widget.card.cardNumber!.isNotEmpty
                         ? _formatCardNumber(widget.card.cardNumber!)
                         : 'XXXX XXXX XXXX XXXX',
-                    style: const TextStyle(
-                      color: Colors.white,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onPrimary,
                       fontSize: 22,
                       fontWeight: FontWeight.w600,
                       letterSpacing: 2,
@@ -183,8 +200,8 @@ class _CardDetailScreenState extends State<CardDetailScreen> {
                   const SizedBox(height: 20),
                   Text(
                     widget.card.cardName,
-                    style: const TextStyle(
-                      color: Colors.white,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onPrimary,
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
                     ),
@@ -192,7 +209,7 @@ class _CardDetailScreenState extends State<CardDetailScreen> {
                 ],
               ),
             ),
-            
+
             // Details Section
             Container(
               width: screenSize.width,
@@ -207,55 +224,73 @@ class _CardDetailScreenState extends State<CardDetailScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
+                      Text(
                         'DETALLES DE LA TARJETA',
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
-                          color: Colors.black54,
+                          color: Theme.of(context).colorScheme.onPrimary,
                         ),
                       ),
                       const Divider(thickness: 1),
                       _buildDetailRow('Nombre:', widget.card.cardName),
                       _buildDetailRow('Banco:', widget.card.bank!),
-                      _buildDetailRow('Número:', 
-                         widget.card.cardNumber != null && widget.card.cardNumber!.isNotEmpty
-                         ? _formatCardNumber(widget.card.cardNumber!)
-                         : 'N/A'),
-                      _buildDetailRow('Tipo:', 
-                          widget.card.isCredit ? 'Tarjeta de Crédito' : 'Tarjeta de Débito'),
-                      
-                      if (widget.card.isCredit && widget.card.limit != null) ...[
-                        _buildDetailRow('Límite de Crédito:', 
-                          moneyFormat.format(widget.card.limit)),
-                        _buildDetailRow('Balance Actual:', 
-                          moneyFormat.format(widget.card.currentBalance ?? 0)),
-                          
+                      _buildDetailRow(
+                        'Número:',
+                        widget.card.cardNumber != null &&
+                                widget.card.cardNumber!.isNotEmpty
+                            ? _formatCardNumber(widget.card.cardNumber!)
+                            : 'N/A',
+                      ),
+                      _buildDetailRow(
+                        'Tipo:',
+                        widget.card.isCredit
+                            ? 'Tarjeta de Crédito'
+                            : 'Tarjeta de Débito',
+                      ),
+
+                      if (widget.card.isCredit &&
+                          widget.card.limit != null) ...[
+                        _buildDetailRow(
+                          'Límite de Crédito:',
+                          moneyFormat.format(widget.card.limit),
+                        ),
+                        _buildDetailRow(
+                          'Balance Actual:',
+                          moneyFormat.format(widget.card.currentBalance ?? 0),
+                        ),
+
                         // Fechas
                         if (widget.card.limitDate != null)
-                          _buildDetailRow('Fecha límite de pago:', 
-                            '${widget.card.limitDate!.day}/${widget.card.limitDate!.month}'),
+                          _buildDetailRow(
+                            'Fecha límite de pago:',
+                            '${widget.card.limitDate!.day}/${widget.card.limitDate!.month}',
+                          ),
                         if (widget.card.corteFecha != null)
-                          _buildDetailRow('Fecha de corte:', 
-                            '${widget.card.corteFecha!.day}/${widget.card.corteFecha!.month}'),
-                            
+                          _buildDetailRow(
+                            'Fecha de corte:',
+                            '${widget.card.corteFecha!.day}/${widget.card.corteFecha!.month}',
+                          ),
+
                         // Información adicional sobre balance
                         const SizedBox(height: 16),
                         _buildProgressIndicator(
-                          'Uso de Crédito', 
-                          (widget.card.currentBalance ?? 0) / (widget.card.limit ?? 1), 
-                          context
+                          'Uso de Crédito',
+                          (widget.card.currentBalance ?? 0) /
+                              (widget.card.limit ?? 1),
+                          context,
                         ),
-                        
+
                         // Calculadora de intereses
-                        if (widget.card.currentBalance != null && widget.card.currentBalance! > 0) ...[
+                        if (widget.card.currentBalance != null &&
+                            widget.card.currentBalance! > 0) ...[
                           const SizedBox(height: 24),
-                          const Text(
+                          Text(
                             'CALCULADORA DE INTERESES',
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
-                              color: Colors.black54,
+                              color: Theme.of(context).colorScheme.onPrimary,
                             ),
                           ),
                           const Divider(thickness: 1),
@@ -268,7 +303,10 @@ class _CardDetailScreenState extends State<CardDetailScreen> {
                                   decoration: const InputDecoration(
                                     labelText: 'Tasa de interés anual (%)',
                                     border: OutlineInputBorder(),
-                                    contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                                    contentPadding: EdgeInsets.symmetric(
+                                      horizontal: 12,
+                                      vertical: 12,
+                                    ),
                                   ),
                                   keyboardType: TextInputType.number,
                                 ),
@@ -276,12 +314,15 @@ class _CardDetailScreenState extends State<CardDetailScreen> {
                               const SizedBox(width: 16),
                               DropdownButton<int>(
                                 value: selectedMonths,
-                                items: [1, 2, 3, 6, 12].map((int months) {
-                                  return DropdownMenuItem<int>(
-                                    value: months,
-                                    child: Text('$months ${months == 1 ? 'mes' : 'meses'}'),
-                                  );
-                                }).toList(),
+                                items:
+                                    [1, 2, 3, 6, 12].map((int months) {
+                                      return DropdownMenuItem<int>(
+                                        value: months,
+                                        child: Text(
+                                          '$months ${months == 1 ? 'mes' : 'meses'}',
+                                        ),
+                                      );
+                                    }).toList(),
                                 onChanged: (int? newValue) {
                                   if (newValue != null) {
                                     setState(() {
@@ -298,11 +339,15 @@ class _CardDetailScreenState extends State<CardDetailScreen> {
                             child: ElevatedButton.icon(
                               onPressed: _calculateInterest,
                               icon: const Icon(Icons.calculate),
-                              label: const Text('Calcular intereses si no pago'),
+                              label: const Text(
+                                'Calcular intereses si no pago',
+                              ),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.red.shade700,
                                 foregroundColor: Colors.white,
-                                padding: const EdgeInsets.symmetric(vertical: 12),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 12,
+                                ),
                               ),
                             ),
                           ),
@@ -327,24 +372,25 @@ class _CardDetailScreenState extends State<CardDetailScreen> {
         children: [
           Text(
             label,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 16,
-              color: Colors.black54,
+              color: Theme.of(context).colorScheme.onPrimary,
             ),
           ),
           Text(
             value,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-            ),
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
           ),
         ],
       ),
     );
   }
-  
-  Widget _buildProgressIndicator(String label, double value, BuildContext context) {
+
+  Widget _buildProgressIndicator(
+    String label,
+    double value,
+    BuildContext context,
+  ) {
     Color progressColor;
     if (value < 0.5) {
       progressColor = Colors.green;
@@ -353,15 +399,15 @@ class _CardDetailScreenState extends State<CardDetailScreen> {
     } else {
       progressColor = Colors.red;
     }
-    
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           label,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 16,
-            color: Colors.black54,
+            color: Theme.of(context).colorScheme.onPrimary,
           ),
         ),
         const SizedBox(height: 8),
@@ -378,11 +424,19 @@ class _CardDetailScreenState extends State<CardDetailScreen> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('${(value * 100).toInt()}%', 
-              style: TextStyle(color: progressColor, fontWeight: FontWeight.bold)),
             Text(
-              value >= 0.9 ? '¡Cerca del límite!' : 
-              value >= 0.75 ? 'Uso elevado' : 'Buen manejo',
+              '${(value * 100).toInt()}%',
+              style: TextStyle(
+                color: progressColor,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text(
+              value >= 0.9
+                  ? '¡Cerca del límite!'
+                  : value >= 0.75
+                  ? 'Uso elevado'
+                  : 'Buen manejo',
               style: TextStyle(
                 color: progressColor,
                 fontWeight: FontWeight.w500,
@@ -393,13 +447,14 @@ class _CardDetailScreenState extends State<CardDetailScreen> {
       ],
     );
   }
-  
+
   String _formatCardNumber(String number) {
     if (number.length < 4) return number;
-    
+
     // Solo mostrar los últimos 4 dígitos
     String masked = 'XXXX XXXX XXXX ';
-    String lastFour = number.length >= 4 ? number.substring(number.length - 4) : number;
+    String lastFour =
+        number.length >= 4 ? number.substring(number.length - 4) : number;
     return masked + lastFour;
   }
 }

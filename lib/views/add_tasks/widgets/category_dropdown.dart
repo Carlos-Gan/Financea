@@ -125,148 +125,186 @@ class _CategoryDropdownState extends State<CategoryDropdown> {
     showDialog(
       context: context,
       builder: (context) {
+        final theme = Theme.of(context);
+        final isDarkMode = theme.brightness == Brightness.dark;
         return StatefulBuilder(
           builder:
               (context, setState) => AlertDialog(
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
+                  borderRadius: BorderRadius.circular(30),
                 ),
+                backgroundColor: isDarkMode ? Colors.grey[900] : Colors.white,
                 title: Text(
                   AppStr.get('addCategory'),
-                  style: const TextStyle(
+                  style: theme.textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.bold,
-                    fontSize: 20,
+                    color: isDarkMode ? Colors.white : Colors.black,
                   ),
                 ),
                 content: SizedBox(
                   width: MediaQuery.of(context).size.width * 0.8,
                   height: 430,
-                  child: SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        TextField(
-                          controller: _newCategoryController,
-                          decoration: InputDecoration(
-                            labelText: AppStr.get('name_category'),
-                            labelStyle: const TextStyle(
-                              fontWeight: FontWeight.w500,
-                            ),
-                            filled: true,
-                            fillColor: Colors.grey[100],
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide: BorderSide.none,
-                            ),
-                          ),
+                  child: Scrollbar(
+                    thumbVisibility: true,
+                    child: SingleChildScrollView(
+                      child: DefaultTextStyle(
+                        style: theme.textTheme.bodyMedium!.copyWith(
+                          color: isDarkMode ? Colors.white70 : Colors.black87,
                         ),
-                        const SizedBox(height: 20),
-
-                        Text(
-                          "Elige un ícono:",
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(height: 10),
-
-                        // Selector de íconos
-                        Container(
-                          constraints: const BoxConstraints(maxHeight: 250),
-                          child: GridView.builder(
-                            shrinkWrap: true,
-                            physics: const BouncingScrollPhysics(),
-                            itemCount: availableIcons.length,
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 5,
-                                  mainAxisSpacing: 12,
-                                  crossAxisSpacing: 12,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            TextField(
+                              controller: _newCategoryController,
+                              decoration: InputDecoration(
+                                labelText: AppStr.get('name_category'),
+                                filled: true,
+                                fillColor:
+                                    isDarkMode
+                                        ? Colors.grey[800]
+                                        : Colors.grey[200],
+                                labelStyle: theme.textTheme.bodyMedium
+                                    ?.copyWith(
+                                      color:
+                                          isDarkMode
+                                              ? Colors.white70
+                                              : Colors.black87,
+                                    ),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                  borderSide: BorderSide.none,
                                 ),
-                            itemBuilder: (context, index) {
-                              final icon = availableIcons[index];
-                              final isSelected = _selectedIcon == icon;
-                              return GestureDetector(
-                                onTap: () {
-                                  setState(() => _selectedIcon = icon);
-                                },
-                                child: AnimatedContainer(
-                                  duration: const Duration(milliseconds: 200),
-                                  padding: const EdgeInsets.all(8),
-                                  decoration: BoxDecoration(
-                                    color:
-                                        isSelected
-                                            // ignore: deprecated_member_use
-                                            ? _selectedColor.withOpacity(0.15)
-                                            : Colors.grey[100],
-                                    border: Border.all(
+                              ),
+                              style: TextStyle(
+                                color: isDarkMode ? Colors.white : Colors.black,
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+                            Text(
+                              "Elige un ícono:",
+                              style: theme.textTheme.bodyLarge?.copyWith(
+                                fontWeight: FontWeight.bold,
+                                color: isDarkMode ? Colors.white : Colors.black,
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            GridView.builder(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: availableIcons.length,
+                              gridDelegate:
+                                  const SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 5,
+                                    mainAxisSpacing: 12,
+                                    crossAxisSpacing: 12,
+                                  ),
+                              itemBuilder: (context, index) {
+                                final icon = availableIcons[index];
+                                final isSelected = _selectedIcon == icon;
+                                return GestureDetector(
+                                  onTap: () {
+                                    setState(() => _selectedIcon = icon);
+                                  },
+                                  child: AnimatedContainer(
+                                    duration: const Duration(milliseconds: 200),
+                                    padding: const EdgeInsets.all(8),
+                                    decoration: BoxDecoration(
+                                      color:
+                                          isSelected
+                                              ? _selectedColor.withOpacity(0.2)
+                                              : isDarkMode
+                                              ? Colors.grey[800]
+                                              : Colors.grey[200],
+                                      border: Border.all(
+                                        color:
+                                            isSelected
+                                                ? _selectedColor
+                                                : Colors.transparent,
+                                        width: 2,
+                                      ),
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: Icon(
+                                      icon,
                                       color:
                                           isSelected
                                               ? _selectedColor
-                                              : Colors.transparent,
-                                      width: 2,
-                                    ),
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: Icon(
-                                    icon,
-                                    color:
-                                        isSelected
-                                            ? _selectedColor
-                                            : Colors.grey[700],
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-
-                        const SizedBox(height: 20),
-
-                        Text(
-                          "Color:",
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        const SizedBox(height: 10),
-                        // Selector de color
-                        GestureDetector(
-                          onTap: () {
-                            showDialog(
-                              context: context,
-                              builder:
-                                  (_) => AlertDialog(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(15),
-                                    ),
-                                    title: const Text("Selecciona un color"),
-                                    content: SingleChildScrollView(
-                                      child: BlockPicker(
-                                        pickerColor: _selectedColor,
-                                        onColorChanged: (color) {
-                                          setState(
-                                            () => _selectedColor = color,
-                                          );
-                                          Navigator.pop(context);
-                                        },
-                                      ),
+                                              : isDarkMode
+                                              ? Colors.white70
+                                              : Colors.black87,
                                     ),
                                   ),
-                            );
-                          },
-                          // Muestra el color seleccionado
-                          child: Container(
-                            width: 40,
-                            height: 40,
-                            margin: const EdgeInsets.only(top: 5),
-                            decoration: BoxDecoration(
-                              color: _selectedColor,
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                color: Colors.black54,
-                                width: 1,
+                                );
+                              },
+                            ),
+                            const SizedBox(height: 20),
+                            Text(
+                              "Color:",
+                              style: theme.textTheme.bodyLarge?.copyWith(
+                                fontWeight: FontWeight.bold,
+                                color: isDarkMode ? Colors.white : Colors.black,
                               ),
                             ),
-                          ),
+                            const SizedBox(height: 10),
+                            GestureDetector(
+                              onTap: () {
+                                showDialog(
+                                  context: context,
+                                  builder:
+                                      (_) => AlertDialog(
+                                        backgroundColor:
+                                            isDarkMode
+                                                ? Colors.grey[900]
+                                                : Colors.white,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(
+                                            15,
+                                          ),
+                                        ),
+                                        title: Text(
+                                          "Selecciona un color",
+                                          style: theme.textTheme.titleLarge
+                                              ?.copyWith(
+                                                color:
+                                                    isDarkMode
+                                                        ? Colors.white
+                                                        : Colors.black,
+                                              ),
+                                        ),
+                                        content: SingleChildScrollView(
+                                          child: BlockPicker(
+                                            pickerColor: _selectedColor,
+                                            onColorChanged: (color) {
+                                              setState(
+                                                () => _selectedColor = color,
+                                              );
+                                              Navigator.pop(context);
+                                            },
+                                          ),
+                                        ),
+                                      ),
+                                );
+                              },
+                              child: Container(
+                                width: 40,
+                                height: 40,
+                                margin: const EdgeInsets.only(top: 5),
+                                decoration: BoxDecoration(
+                                  color: _selectedColor,
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color:
+                                        isDarkMode
+                                            ? Colors.white
+                                            : Colors.black,
+                                    width: 1,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                   ),
                 ),
@@ -278,7 +316,9 @@ class _CategoryDropdownState extends State<CategoryDropdown> {
                   TextButton(
                     onPressed: () => Navigator.pop(context),
                     style: TextButton.styleFrom(
-                      foregroundColor: Colors.grey[600],
+                      foregroundColor: theme.colorScheme.onSurface.withOpacity(
+                        0.7,
+                      ),
                     ),
                     child: Text(AppStr.get('cancel')),
                   ),
@@ -301,7 +341,8 @@ class _CategoryDropdownState extends State<CategoryDropdown> {
                       Navigator.pop(context);
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      backgroundColor: theme.colorScheme.primary,
+                      foregroundColor: theme.colorScheme.onPrimary,
                       padding: const EdgeInsets.symmetric(
                         horizontal: 24,
                         vertical: 12,
@@ -310,10 +351,7 @@ class _CategoryDropdownState extends State<CategoryDropdown> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    child: Text(
-                      AppStr.get('save'),
-                      style: const TextStyle(color: Colors.white),
-                    ),
+                    child: Text(AppStr.get('save')),
                   ),
                 ],
               ),
@@ -392,10 +430,10 @@ class _CategoryDropdownState extends State<CategoryDropdown> {
                           category.name,
                           style:
                               widget.textStyle ??
-                              const TextStyle(
+                              TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w600,
-                                color: Colors.black,
+                                color: Theme.of(context).colorScheme.onPrimary,
                               ),
                         ),
                       ],
@@ -414,13 +452,13 @@ class _CategoryDropdownState extends State<CategoryDropdown> {
                 widget.hintText,
                 style:
                     widget.textStyle ??
-                    const TextStyle(
+                    TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
-                      color: Colors.black,
+                      color: Theme.of(context).colorScheme.onPrimary,
                     ),
               ),
-              dropdownColor: widget.dropdownColor,
+              dropdownColor: Theme.of(context).scaffoldBackgroundColor,
               isExpanded: true,
               underline: Container(),
             );

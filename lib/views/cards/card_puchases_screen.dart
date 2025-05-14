@@ -64,7 +64,7 @@ class _CardPurchasesScreenState extends State<CardPurchasesScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Compras - ${widget.card.cardName}'),
-        backgroundColor: AppColors.secondaryColor,
+        backgroundColor: AppColors.primaryColor(context),
         elevation: 4,
       ),
       body: Column(
@@ -93,7 +93,7 @@ class _CardPurchasesScreenState extends State<CardPurchasesScreen> {
               style: ButtonStyle(
                 backgroundColor: WidgetStateProperty.all(
                   // ignore: deprecated_member_use
-                  AppColors.secondaryColor.withOpacity(0.1),
+                  AppColors.primaryColor(context).withOpacity(0.1),
                 ),
               ),
             ),

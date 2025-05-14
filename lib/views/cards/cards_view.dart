@@ -39,10 +39,15 @@ class _CardsViewState extends State<CardsView> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppStr.get('paymentMethods'), 
-        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold) ,),
+        title: Text(
+          AppStr.get('paymentMethods'),
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.onPrimary,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         centerTitle: true,
-        backgroundColor: AppColors.secondaryColor,
+        backgroundColor: AppColors.primaryColor(context),
       ),
       body: Column(
         children: [
@@ -62,7 +67,7 @@ class _CardsViewState extends State<CardsView> {
                 child: Text(
                   '+ ${AppStr.get('addCardTitle')}',
                   style: TextStyle(
-                    color: Colors.black,
+                    color: Theme.of(context).colorScheme.onPrimary,
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
                   ),
@@ -127,7 +132,7 @@ class _CardsViewState extends State<CardsView> {
                                 isCreditCard
                                     ? FontAwesomeIcons.creditCard
                                     : FontAwesomeIcons.moneyBill,
-                                color: AppColors.secondaryColor,
+                                color: AppColors.primaryColor(context),
                               ),
                               title: Text(card.cardName),
                               subtitle: Text(
@@ -140,19 +145,19 @@ class _CardsViewState extends State<CardsView> {
                                     context: context,
                                     builder: (BuildContext context) {
                                       return AlertDialog(
-                                        title:  Text(AppStr.get('areYouSure')),
-                                        content:  Text(
+                                        title: Text(AppStr.get('areYouSure')),
+                                        content: Text(
                                           AppStr.get('deleteCardMessage'),
                                         ),
                                         actions: [
                                           TextButton(
-                                            child:  Text(AppStr.get('cancel')),
+                                            child: Text(AppStr.get('cancel')),
                                             onPressed: () {
                                               Navigator.of(context).pop();
                                             },
                                           ),
                                           TextButton(
-                                            child:  Text(
+                                            child: Text(
                                               AppStr.get('delete'),
                                               style: TextStyle(
                                                 color: Colors.red,
@@ -191,7 +196,9 @@ class _CardsViewState extends State<CardsView> {
                                       color:
                                           progress > 1
                                               ? Colors.red
-                                              : Colors.black,
+                                              : Theme.of(
+                                                context,
+                                              ).colorScheme.onPrimary,
                                     ),
                                   ),
                                   LinearProgressIndicator(
@@ -199,7 +206,7 @@ class _CardsViewState extends State<CardsView> {
                                     color:
                                         progress > 1
                                             ? Colors.red
-                                            : AppColors.secondaryColor,
+                                            : AppColors.primaryColor(context),
                                     backgroundColor: Colors.grey[300],
                                   ),
                                 ],
@@ -228,10 +235,24 @@ class _CardsViewState extends State<CardsView> {
                                       () {},
                                     ); // Refrescar la vista después de editar
                                   },
-                                  icon: const Icon(Icons.edit),
-                                  label: Text(AppStr.get('editar')),
+                                  icon: Icon(
+                                    Icons.edit,
+                                    color:
+                                        Theme.of(context).colorScheme.onPrimary,
+                                  ),
+                                  label: Text(
+                                    AppStr.get('editar'),
+                                    style: TextStyle(
+                                      color:
+                                          Theme.of(
+                                            context,
+                                          ).colorScheme.onPrimary,
+                                    ),
+                                  ),
                                   style: ElevatedButton.styleFrom(
-                                    backgroundColor: AppColors.secondaryColor,
+                                    backgroundColor: AppColors.primaryColor(
+                                      context,
+                                    ),
                                   ),
                                 ),
                                 ElevatedButton.icon(
@@ -246,8 +267,20 @@ class _CardsViewState extends State<CardsView> {
                                       ),
                                     );
                                   },
-                                  icon: const Icon(Icons.receipt_long),
-                                  label: Text(AppStr.get('PurchasesButton')),
+                                  icon: Icon(
+                                    Icons.receipt_long,
+                                    color:
+                                        Theme.of(context).colorScheme.onPrimary,
+                                  ),
+                                  label: Text(
+                                    AppStr.get('PurchasesButton'),
+                                    style: TextStyle(
+                                      color:
+                                          Theme.of(
+                                            context,
+                                          ).colorScheme.onPrimary,
+                                    ),
+                                  ),
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: Colors.blueGrey,
                                   ),

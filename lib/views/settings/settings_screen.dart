@@ -36,7 +36,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
         return AnnotatedRegion<SystemUiOverlayStyle>(
           value: SystemUiOverlayStyle(
-            statusBarColor: AppColors.secondaryColor,
+            statusBarColor: AppColors.primaryColor(context),
             statusBarIconBrightness: Brightness.light,
           ),
           child: Scaffold(
@@ -44,12 +44,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
               centerTitle: true,
               title: Text(
                 AppStr.get('settings'),
-                style: const TextStyle(
-                  color: Colors.white,
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onPrimary,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              backgroundColor: AppColors.secondaryColor,
+              backgroundColor: AppColors.primaryColor(context),
               iconTheme: const IconThemeData(color: Colors.white),
             ),
             body: _buildBodyContent(),
@@ -71,6 +71,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
           _buildSectionTitle(AppStr.get("settingsLang")),
           const SizedBox(height: 12),
           _buildLanguageCard(),
+          const SizedBox(height: 24),
+          _buildSectionTitle(AppStr.get('themeSettings')),
+          const SizedBox(height: 12),
+          _buildThemeModeCard(),
+          const SizedBox(height: 12),
+          _buildColorSelectionCard(),
           const SizedBox(height: 32),
           _buildSaveButton(),
         ],
@@ -83,10 +89,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
       alignment: Alignment.centerLeft,
       child: Text(
         title,
-        style: const TextStyle(
+        style: TextStyle(
           fontSize: 22,
           fontWeight: FontWeight.bold,
-          color: Colors.black,
+          color: Theme.of(context).colorScheme.onPrimary,
         ),
       ),
     );
@@ -106,19 +112,24 @@ class _SettingsScreenState extends State<SettingsScreen> {
               contentPadding: EdgeInsets.zero,
               title: Text(
                 AppStr.get('userName'),
-                style: const TextStyle(
+                style: TextStyle(
                   fontWeight: FontWeight.w500,
-                  color: Colors.black,
+                  color: Theme.of(context).colorScheme.onPrimary,
                 ),
               ),
               subtitle: Text(
                 settings.username.isEmpty
                     ? AppStr.get('notSet')
                     : settings.username,
-                style: const TextStyle(color: Colors.black),
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onPrimary,
+                ),
               ),
               trailing: IconButton(
-                icon: const Icon(Icons.edit, color: Colors.black54),
+                icon: Icon(
+                  Icons.edit,
+                  color: Theme.of(context).colorScheme.onPrimary,
+                ),
                 onPressed: () => _showUsernameDialog(context),
               ),
             ),
@@ -143,9 +154,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
               children: [
                 Text(
                   AppStr.get('language'),
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontWeight: FontWeight.w500,
-                    color: Colors.black,
+                    color: Theme.of(context).colorScheme.onPrimary,
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -160,7 +171,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       vertical: 14,
                     ),
                   ),
-                  style: const TextStyle(color: Colors.black),
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onPrimary,
+                  ),
                   isExpanded: true,
                   items:
                       _languages.map((String lang) {
@@ -196,17 +209,18 @@ class _SettingsScreenState extends State<SettingsScreen> {
             AppStr.setLang(_tempSectLang!);
           }
           // ignore: use_build_context_synchronously
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(AppStr.get('configSavedMessage')),
-              backgroundColor: Colors.green,
-              duration: const Duration(seconds: 2),
-            ),
-          );
-          setState(() {});
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(AppStr.get('configSavedMessage')),
+                backgroundColor: Colors.green,
+                duration: const Duration(seconds: 2),
+              ),
+            );
+          }
         },
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.secondaryColor,
+          backgroundColor: AppColors.primaryColor(context),
           padding: const EdgeInsets.symmetric(vertical: 16),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
@@ -234,8 +248,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
           title: Text(
             AppStr.get("changeUsername"),
-            style: const TextStyle(
-              color: Colors.black,
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onPrimary,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -244,21 +258,26 @@ class _SettingsScreenState extends State<SettingsScreen> {
             autofocus: true,
             decoration: InputDecoration(
               hintText: AppStr.get("inputUsername"),
-              hintStyle: const TextStyle(color: Colors.black54),
+              hintStyle: TextStyle(
+                color: Theme.of(context).colorScheme.onPrimary,
+              ),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
                 borderSide: const BorderSide(color: Colors.grey),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: AppColors.secondaryColor),
+                borderSide: BorderSide(color: AppColors.primaryColor(context)),
               ),
               contentPadding: const EdgeInsets.symmetric(
                 horizontal: 16,
                 vertical: 12,
               ),
             ),
-            style: const TextStyle(color: Colors.black, fontSize: 16),
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onPrimary,
+              fontSize: 16,
+            ),
             textCapitalization: TextCapitalization.words,
           ),
           actions: [
@@ -274,7 +293,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.secondaryColor,
+                backgroundColor: AppColors.primaryColor(context),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -316,6 +335,157 @@ class _SettingsScreenState extends State<SettingsScreen> {
             bottom: 16,
           ),
           contentPadding: const EdgeInsets.fromLTRB(24, 20, 24, 0),
+        );
+      },
+    );
+  }
+
+  Widget _buildThemeModeCard() {
+    return Consumer<UserSettings>(
+      builder: (context, settings, _) {
+        return Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          elevation: 4,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  AppStr.get('appTheme'),
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color: Theme.of(context).colorScheme.onPrimary,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                DropdownButtonFormField<ThemeMode>(
+                  value: settings.thememode,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 14,
+                    ),
+                  ),
+                  style: const TextStyle(color: Colors.black),
+                  isExpanded: true,
+                  items: [
+                    DropdownMenuItem(
+                      value: ThemeMode.system,
+                      child: Text(
+                        AppStr.get('systemTheme'),
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.onPrimary,
+                        ),
+                      ),
+                    ),
+                    DropdownMenuItem(
+                      value: ThemeMode.light,
+                      child: Text(
+                        AppStr.get('lightTheme'),
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.onPrimary,
+                        ),
+                      ),
+                    ),
+                    DropdownMenuItem(
+                      value: ThemeMode.dark,
+                      child: Text(
+                        AppStr.get('darkTheme'),
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.onPrimary,
+                        ),
+                      ),
+                    ),
+                  ],
+                  onChanged: (ThemeMode? newValue) {
+                    if (newValue != null) {
+                      settings.setThemeMode(newValue);
+                    }
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildColorSelectionCard() {
+    return Consumer<UserSettings>(
+      builder: (context, settings, _) {
+        return Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          elevation: 4,
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  AppStr.get('primaryColor'),
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    color: Theme.of(context).colorScheme.onPrimary,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                SizedBox(
+                  height: 50,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: settings.availableColors.length,
+                    itemBuilder: (context, index) {
+                      final color = settings.availableColors[index];
+                      return Padding(
+                        padding: const EdgeInsets.only(right: 12),
+                        child: GestureDetector(
+                          onTap: () => settings.setPrimaryColor(color),
+                          child: Container(
+                            width: 50,
+                            height: 50,
+                            decoration: BoxDecoration(
+                              color: color,
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color:
+                                    settings.primaryColor == color
+                                        ? Colors.black
+                                        : Colors.transparent,
+                                width: 2,
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.1),
+                                  blurRadius: 4,
+                                  offset: const Offset(0, 2),
+                                ),
+                              ],
+                            ),
+                            child:
+                                settings.primaryColor == color
+                                    ? const Icon(
+                                      Icons.check,
+                                      color: Colors.white,
+                                    )
+                                    : null,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
         );
       },
     );

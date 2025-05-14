@@ -21,7 +21,7 @@ class WelcomeWidget extends StatelessWidget {
               width: double.infinity,
               height: 240,
               decoration: BoxDecoration(
-                color: AppColors.secondaryColor,
+                color: AppColors.primaryColor(context),
                 borderRadius: const BorderRadius.only(
                   bottomLeft: Radius.circular(30),
                   bottomRight: Radius.circular(30),

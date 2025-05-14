@@ -104,7 +104,7 @@ class _ChartState extends State<Chart> {
         primaryXAxis: CategoryAxis(),
         series: <SplineSeries<SalesData, String>>[
           SplineSeries<SalesData, String>(
-            color: AppColors.secondaryColor,
+            color: AppColors.primaryColor(context),
             width: 3,
             dataSource: data,
             xValueMapper: (SalesData sd, _) => sd.label,

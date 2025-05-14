@@ -62,10 +62,10 @@ class _TypeSelectorState extends State<TypeSelector> {
                   const SizedBox(width: 10),
                   Text(
                     e,
-                    style: widget.textStyle ?? const TextStyle(
+                    style: widget.textStyle ?? TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
-                      color: Colors.black,
+                      color: Theme.of(context).colorScheme.onPrimary,
                     ),
                   ),
                 ],
@@ -83,10 +83,10 @@ class _TypeSelectorState extends State<TypeSelector> {
                   const SizedBox(width: 10),
                   Text(
                     e,
-                    style: widget.textStyle ?? const TextStyle(
+                    style: widget.textStyle ?? TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
-                      color: Colors.black,
+                      color: Theme.of(context).colorScheme.onPrimary,
                     ),
                   ),
                 ],
@@ -95,13 +95,13 @@ class _TypeSelectorState extends State<TypeSelector> {
           },
           hint: Text(
             widget.hintText,
-            style: widget.textStyle ?? const TextStyle(
+            style: widget.textStyle ?? TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w600,
-              color: Colors.black,
+              color: Theme.of(context).colorScheme.onPrimary,
             ),
           ),
-          dropdownColor: Colors.white,
+          dropdownColor: Theme.of(context).scaffoldBackgroundColor,
           isExpanded: true,
           underline: Container(),
         ),

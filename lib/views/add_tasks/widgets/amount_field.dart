@@ -47,10 +47,10 @@ class AmountField extends StatelessWidget {
               vertical: 15,
             ),
             labelText: labelText,
-            labelStyle: labelStyle ?? const TextStyle(
+            labelStyle: labelStyle ??  TextStyle(
               fontSize: 17,
               fontWeight: FontWeight.w600,
-              color: Colors.black,
+              color: Theme.of(context).colorScheme.onPrimary,
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),

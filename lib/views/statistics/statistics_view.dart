@@ -1,9 +1,12 @@
 import 'package:financea/data/utility.dart';
+import 'package:financea/model/category/category_data.dart';
 import 'package:financea/model/datas/add_data.dart';
 import 'package:financea/utils/app_colors.dart';
 import 'package:financea/utils/app_str.dart';
 import 'package:financea/views/statistics/widgets/chart.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 
 class StatisticsView extends StatefulWidget {
@@ -17,10 +20,18 @@ class _StatisticsViewState extends State<StatisticsView> {
   int currentIndex = 0;
   bool showExpenses = true;
 
+  final box = Hive.box<AddData>('data');
+  final categoryBox = Hive.box<Category>('categories');
+
   @override
   Widget build(BuildContext context) {
-    // Obtener datos según la pestaña seleccionada
-    var tabs = [AppStr.get('day'),AppStr.get('week'), AppStr.get('month'), AppStr.get('year')];
+    var tabs = [
+      AppStr.get('day'),
+      AppStr.get('week'),
+      AppStr.get('month'),
+      AppStr.get('year'),
+    ];
+
     List<AddData> rawData;
     switch (currentIndex) {
       case 1:
@@ -36,11 +47,13 @@ class _StatisticsViewState extends State<StatisticsView> {
         rawData = today();
     }
 
-    // Filtrar según tipo (Expense o Income) y ordenar
-    final filtered = rawData
-        .where((d) => showExpenses ? d.IN == 'Expense' : d.IN == 'Income')
-        .toList()
-      ..sort((a, b) => double.parse(b.amount).compareTo(double.parse(a.amount)));
+    final filtered =
+        rawData
+            .where((d) => showExpenses ? d.IN == 'Expense' : d.IN == 'Income')
+            .toList()
+          ..sort(
+            (a, b) => double.parse(b.amount).compareTo(double.parse(a.amount)),
+          );
 
     return Scaffold(
       body: SafeArea(
@@ -55,7 +68,7 @@ class _StatisticsViewState extends State<StatisticsView> {
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  color: Colors.black,
+                  color: Theme.of(context).colorScheme.onPrimary,
                 ),
               ),
             ),
@@ -64,33 +77,33 @@ class _StatisticsViewState extends State<StatisticsView> {
               padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: List.generate(
-                  tabs.length,
-                  (i) {
-                    final selected = i == currentIndex;
-                    return GestureDetector(
-                      onTap: () => setState(() => currentIndex = i),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 8),
-                        decoration: BoxDecoration(
-                          color: selected
-                              ? AppColors.secondaryColor
-                              : AppColors.secondaryColorDark,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Text(
-                          tabs[i],
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                          ),
+                children: List.generate(tabs.length, (i) {
+                  final selected = i == currentIndex;
+                  return GestureDetector(
+                    onTap: () => setState(() => currentIndex = i),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                      decoration: BoxDecoration(
+                        color:
+                            selected
+                                ? AppColors.primaryColor(context)
+                                : AppColors.primaryColorDark(context),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        tabs[i],
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
-                    );
-                  },
-                ),
+                    ),
+                  );
+                }),
               ),
             ),
             const SizedBox(height: 20),
@@ -112,11 +125,13 @@ class _StatisticsViewState extends State<StatisticsView> {
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           Text(
-                            showExpenses ? AppStr.get('expenses') : AppStr.get('income'),
+                            showExpenses
+                                ? AppStr.get('expenses')
+                                : AppStr.get('income'),
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
-                              color: AppColors.secondaryColor,
+                              color: AppColors.primaryColor(context),
                             ),
                           ),
                           Icon(
@@ -140,7 +155,7 @@ class _StatisticsViewState extends State<StatisticsView> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                   Text(
+                  Text(
                     AppStr.get('topSpending'),
                     style: TextStyle(
                       fontSize: 16,
@@ -148,8 +163,7 @@ class _StatisticsViewState extends State<StatisticsView> {
                       color: Colors.grey,
                     ),
                   ),
-                  const Icon(Icons.swap_vert,
-                      color: AppColors.secondaryColor),
+                  Icon(Icons.swap_vert, color: AppColors.primaryColor(context)),
                 ],
               ),
             ),
@@ -160,29 +174,39 @@ class _StatisticsViewState extends State<StatisticsView> {
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 itemBuilder: (context, index) {
                   final item = filtered[index];
+
+                  final category = categoryBox.values.firstWhere(
+                    (cat) => cat.name == item.name,
+                    orElse:
+                        () => Category(
+                          name: 'Unknown',
+                          icon: FontAwesomeIcons.question,
+                          color: Colors.grey,
+                        ),
+                  );
+
                   return ListTile(
-                    leading: ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Image.asset(
-                        'img/${item.name}.png',
-                        height: 40,
-                        width: 40,
-                        errorBuilder: (_, __, ___) =>
-                            const Icon(Icons.image_not_supported),
+                    leading: CircleAvatar(
+                      radius: 30,
+                      backgroundColor: category.color.withOpacity(0.2),
+                      child: Icon(
+                        category.icon,
+                        color: category.color,
+                        size: 25,
                       ),
                     ),
                     title: Text(
                       item.name,
                       style: const TextStyle(
-                          fontSize: 17, fontWeight: FontWeight.w600),
+                        fontSize: 17,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                     subtitle: Text(
-                      DateFormat('EEEE, dd/MM/yyyy')
-                          .format(item.datetime.toLocal()),
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey[600],
-                      ),
+                      DateFormat(
+                        'EEEE, dd/MM/yyyy',
+                      ).format(item.datetime.toLocal()),
+                      style: TextStyle(fontSize: 14, color: Colors.grey[600]),
                     ),
                     trailing: Text(
                       '${showExpenses ? '-' : '+'} \$${item.amount}',

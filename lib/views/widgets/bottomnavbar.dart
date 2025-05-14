@@ -29,7 +29,7 @@ class _BottomNavigationBarState extends State<BottomNavBar> {
             context,
           ).push(MaterialPageRoute(builder: (context) => AddScreen()));
         },
-        backgroundColor: AppColors.secondaryColor,
+        backgroundColor: AppColors.primaryColor(context),
         child: const Icon(Icons.add),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -49,7 +49,7 @@ class _BottomNavigationBarState extends State<BottomNavBar> {
                 size: 30,
                 color:
                     _selectedIndex == 0
-                        ? AppColors.secondaryColor
+                        ? AppColors.primaryColor(context)
                         : Colors.amberAccent,
               ),
             ),
@@ -64,7 +64,7 @@ class _BottomNavigationBarState extends State<BottomNavBar> {
                 size: 30,
                 color:
                     _selectedIndex == 1
-                        ? AppColors.secondaryColor
+                        ? AppColors.primaryColor(context)
                         : Colors.amberAccent,
               ),
             ),
@@ -79,7 +79,7 @@ class _BottomNavigationBarState extends State<BottomNavBar> {
                 size: 30,
                 color:
                     _selectedIndex == 2
-                        ? AppColors.secondaryColor
+                        ? AppColors.primaryColor(context)
                         : Colors.amberAccent,
               ),
             ),
@@ -94,7 +94,7 @@ class _BottomNavigationBarState extends State<BottomNavBar> {
                 size: 30,
                 color:
                     _selectedIndex == 3
-                        ? AppColors.secondaryColor
+                        ? AppColors.primaryColor(context)
                         : Colors.amberAccent,
               ),
             ),

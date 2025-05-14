@@ -60,7 +60,6 @@ class _AddScreenState extends State<AddScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[200],
       body: SafeArea(
         child: Stack(
           alignment: AlignmentDirectional.center,
@@ -78,7 +77,7 @@ class _AddScreenState extends State<AddScreen> {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.surface,
       ),
       height: 750,
       width: MediaQuery.of(context).size.width - 100,
@@ -88,6 +87,11 @@ class _AddScreenState extends State<AddScreen> {
           CategoryDropdown(
             selectedCategory: selectedItem,
             hintText: AppStr.get('category'),
+            textStyle: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: Theme.of(context).colorScheme.onPrimary,
+            ),
             onChanged: (value) {
               if (value == 'add_new') {
                 setState(() {
@@ -107,13 +111,18 @@ class _AddScreenState extends State<AddScreen> {
             controller: amount_C,
             focusNode: am,
             labelText: AppStr.get('amount'),
-            focusedBorderColor: AppColors.secondaryColor,
+            labelStyle: TextStyle(
+              fontSize: 17,
+              fontWeight: FontWeight.w600,
+              color: Theme.of(context).colorScheme.onPrimary,
+            ),
+            focusedBorderColor: AppColors.primaryColor(context),
           ),
           SizedBox(height: 30),
           TypeSelector(
             options: _item1,
             initialValue: selectedItem2,
-            hintText: AppStr.get('how'),
+            hintText: AppStr.get('type'),
             onChanged: (String value) {
               setState(() {
                 selectedItem2 = value;
@@ -122,7 +131,7 @@ class _AddScreenState extends State<AddScreen> {
             textStyle: TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w600,
-              color: Colors.black,
+              color: Theme.of(context).colorScheme.onPrimary,
             ),
           ),
           SizedBox(height: 30),
@@ -250,7 +259,7 @@ class _AddScreenState extends State<AddScreen> {
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,
-            color: Colors.black,
+            color: Theme.of(context).colorScheme.onPrimary,
           ),
         ),
       ),
@@ -271,7 +280,7 @@ class _AddScreenState extends State<AddScreen> {
             labelStyle: TextStyle(
               fontSize: 17,
               fontWeight: FontWeight.w600,
-              color: Colors.black,
+              color: Theme.of(context).colorScheme.onPrimary,
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
@@ -280,7 +289,7 @@ class _AddScreenState extends State<AddScreen> {
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
               borderSide: BorderSide(
-                color: AppColors.secondaryColorDark,
+                color: AppColors.primaryColorDark(context),
                 width: 2,
               ),
             ),

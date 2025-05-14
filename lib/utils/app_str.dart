@@ -98,6 +98,13 @@ class AppStr {
       'eliminarCategoria': 'Delete Category?',
       'noSePuedeDeshacer': 'This acion cannot undo',
       'administrarCategory': 'Manage Categories', // Nueva clave añadida
+      'themeSettings': 'Theme Settings', // Nueva clave añadida
+      'systemTheme': 'System Theme', // Nueva clave añadida
+      'lightTheme': 'Light Theme', // Nueva clave añadida
+      'darkTheme': 'Dark Theme', // Nueva clave añadida
+      'primaryColor': 'Primary Color', // Nueva clave añadida
+      'appTheme': 'App Theme', // Nueva clave añadida
+      'type': 'Type', // Nueva clave añadida
     },
     'es': {
       "goodAfternoon": 'Buenas tardes',
@@ -195,6 +202,13 @@ class AppStr {
       'eliminarCategoria': 'Eliminar categoría?', // Nueva clave añadida
       'noSePuedeDeshacer': 'Esta acción no se puede deshacer', // Nueva clave añadida
       'administrarCategory': 'Administrar Categorías', // Nueva clave añadida
+      'themeSettings': 'Configuración de tema', // Nueva clave añadida
+      'systemTheme': 'Tema del sistema', // Nueva clave añadida
+      'lightTheme': 'Tema claro', // Nueva clave añadida
+      'darkTheme': 'Tema oscuro', // Nueva clave añadida
+      'primaryColor': 'Color primario', // Nueva clave añadida
+      'appTheme': 'Tema de la aplicación', // Nueva clave añadida
+      'type': 'Tipo', // Nueva clave añadida
     },
     'fr': {
       "goodAfternoon": 'Bon après-midi',
@@ -289,13 +303,20 @@ class AppStr {
       'add_new': 'Ajouter nouveau',
       'name_category': 'Nom de la catégorie',
       'addCategory': 'Ajouter une nouvelle catégorie',
-      'editarCategory': 'Éditer la catégorie', // Nouvelle clé ajoutée
+      'editarCategory': 'Éditer la catégorie',
       'selectColor': 'Sélectionner une couleur',
       'changeColor': 'Changer la couleur',
       'listo': 'Fait',
-      'eliminarCategoria': 'Supprimer la catégorie ?', // Nouvelle clé ajoutée
-      'noSePuedeDeshacer': 'Cette action ne peut pas être annulée', // Nueva clave añadida
-      'administrarCategory': 'Gérer les catégories', // Nueva clave añadida
+      'eliminarCategoria': 'Supprimer la catégorie ?', 
+      'noSePuedeDeshacer': 'Cette action ne peut pas être annulée', 
+      'administrarCategory': 'Gérer les catégories', 
+      'themeSettings': 'Paramètres du thème', // Nueva clave añadida
+      'systemTheme': 'Thème système', // Nueva clave añadida
+      'lightTheme': 'Thème clair', // Nueva clave añadida
+      'darkTheme': 'Thème sombre', // Nueva clave añadida
+      'primaryColor': 'Couleur primaire', // Nueva clave añadida
+      'appTheme': 'Thème de l\'application', // Nueva clave añadida
+      'type': 'Type', // Nueva clave añadida
     },
     'de': {
       "goodAfternoon": 'Guten Nachmittag',
@@ -397,6 +418,13 @@ class AppStr {
       'eliminarCategoria': 'Kategorie löschen?', // Nueva clave añadida
       'noSePuedeDeshacer': 'Diese Aktion kann nicht rückgängig gemacht werden', // Nueva clave añadida
       'administrarCategory': 'Kategorien verwalten', // Nueva clave añadida
+      'themeSettings': 'Themeneinstellungen', // Nueva clave añadida
+      'systemTheme': 'Systemthema', // Nueva clave añadida
+      'lightTheme': 'Helles Thema', // Nueva clave añadida
+      'darkTheme': 'Dunkles Thema', // Nueva clave añadida
+      'primaryColor': 'Primärfarbe', // Nueva clave añadida
+      'appTheme': 'App-Design', // Nueva clave añadida
+      'type': 'Typ', // Nueva clave añadida
     },
   };
 

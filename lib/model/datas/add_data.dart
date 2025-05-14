@@ -21,5 +21,14 @@ class AddData extends HiveObject {
   @HiveField(7)
   final int meses;
 
-  AddData(this.name, this.explain, this.amount, this.IN, this.datetime, this.pay, this.subscription, this.meses);
+  AddData(
+    this.name,
+    this.explain,
+    this.amount,
+    this.IN,
+    this.datetime,
+    this.pay,
+    this.subscription,
+    this.meses,
+  );
 }

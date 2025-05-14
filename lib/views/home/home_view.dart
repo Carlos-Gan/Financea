@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'dart:developer';
+import 'package:financea/model/category/category_data.dart';
 import 'package:financea/model/datas/add_data.dart';
 import 'package:financea/utils/app_colors.dart';
 import 'package:financea/utils/app_str.dart';
@@ -10,6 +11,7 @@ import 'package:financea/views/home/widget/income_widget.dart';
 import 'package:financea/views/home/widget/welcome_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:intl/intl.dart';
 
@@ -18,6 +20,7 @@ class HomeView extends StatelessWidget {
   // ignore: prefer_typing_uninitialized_variables
   var history;
   final box = Hive.box<AddData>('data');
+  final categoryBox = Hive.box<Category>('categories');
 
   HomeView({super.key});
 
@@ -25,7 +28,7 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle(
-        statusBarColor: AppColors.secondaryColor,
+        statusBarColor: AppColors.primaryColor(context),
         statusBarIconBrightness: Brightness.light,
       ),
       child: Scaffold(
@@ -37,7 +40,11 @@ class HomeView extends StatelessWidget {
                 children: [
                   SizedBox(height: 300, child: _head(context)),
                   Padding(
-                    padding: const EdgeInsets.only(top: 20, left: 20, right: 20),
+                    padding: const EdgeInsets.only(
+                      top: 20,
+                      left: 20,
+                      right: 20,
+                    ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -46,7 +53,7 @@ class HomeView extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.w600,
-                            color: Colors.black,
+                            color: Theme.of(context).colorScheme.onPrimary,
                           ),
                         ),
                         Text(
@@ -54,7 +61,7 @@ class HomeView extends StatelessWidget {
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
-                            color: AppColors.secondaryColorDark,
+                            color: AppColors.primaryColorDark(context),
                           ),
                         ),
                       ],
@@ -64,9 +71,12 @@ class HomeView extends StatelessWidget {
                     child: CustomScrollView(
                       slivers: [
                         SliverList(
-                          delegate: SliverChildBuilderDelegate((context, index) {
+                          delegate: SliverChildBuilderDelegate((
+                            context,
+                            index,
+                          ) {
                             history = box.values.toList()[index];
-                            return getList(history, index);
+                            return getList(history, index, context);
                           }, childCount: box.length),
                         ),
                       ],
@@ -81,21 +91,32 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  Widget getList(AddData history, int index) {
+  Widget getList(AddData history, int index, BuildContext context) {
     return Dismissible(
       key: UniqueKey(),
       onDismissed: (direction) {
         history.delete();
         log('${history.explain} dismissed');
       },
-      child: get(index, history),
+      child: get(index, history, context),
     );
   }
 
-  ListTile get(int index, AddData history) {
+  ListTile get(int index, AddData history, BuildContext context) {
+    final category = categoryBox.values.firstWhere(
+      (cat) => cat.name == history.name,
+      orElse:
+          () => Category(
+            name: 'Unknown',
+            icon: FontAwesomeIcons.question,
+            color: Colors.grey,
+          ),
+    );
     return ListTile(
-      leading: ClipRRect(
-        child: Image.asset('img/${history.name}.png', height: 45, width: 45),
+      leading: CircleAvatar(
+        radius: 30,
+        backgroundColor: AppColors.primaryColor(context).withOpacity(0.2),
+        child: Icon(category.icon, color: category.color, size: 25),
       ),
       title: Text(
         //Invoca al método geter() y obtiene el nombre de la transacción
@@ -103,7 +124,7 @@ class HomeView extends StatelessWidget {
         style: TextStyle(
           fontSize: 16,
           fontWeight: FontWeight.w600,
-          color: Colors.black,
+          color: Theme.of(context).colorScheme.onPrimary,
         ),
       ),
       subtitle: Text(
@@ -112,7 +133,7 @@ class HomeView extends StatelessWidget {
         style: TextStyle(
           fontSize: 14,
           fontWeight: FontWeight.w400,
-          color: Colors.black.withOpacity(0.5),
+          color: Theme.of(context).colorScheme.onPrimary.withOpacity(0.5),
         ),
       ),
       trailing: Column(
@@ -158,7 +179,7 @@ Widget _head(BuildContext context) {
               height: 170,
               width: MediaQuery.of(context).size.width * 0.85,
               decoration: BoxDecoration(
-                color: AppColors.secondaryColorDark,
+                color: AppColors.primaryColorDark(context),
                 borderRadius: BorderRadius.circular(15),
               ),
               child: Column(

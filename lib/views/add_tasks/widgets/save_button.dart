@@ -44,7 +44,7 @@ class SaveButton extends StatelessWidget {
         height: 50,
         width: MediaQuery.of(context).size.width - 200,
         decoration: BoxDecoration(
-          color: AppColors.secondaryColor,
+          color: AppColors.primaryColor(context),
           borderRadius: BorderRadius.circular(10),
         ),
         child: Text(

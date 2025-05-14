@@ -290,19 +290,23 @@ class _AddCardScreenState extends State<AddCardScreen> {
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: SystemUiOverlayStyle(
-        statusBarColor: AppColors.secondaryColorDark,
+        statusBarColor: AppColors.primaryColorDark(context),
         statusBarIconBrightness: Brightness.light,
       ),
       child: Scaffold(
-        backgroundColor: Colors.white,
         appBar: AppBar(
-          iconTheme: const IconThemeData(color: Colors.white),
+          iconTheme: IconThemeData(
+            color: Theme.of(context).colorScheme.onPrimary,
+          ),
           centerTitle: true,
           title: Text(
             AppStr.get('addCardTitle'),
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.onPrimary,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-          backgroundColor: AppColors.secondaryColorDark,
+          backgroundColor: AppColors.primaryColorDark(context),
         ),
         body: Padding(
           padding: const EdgeInsets.all(16),
@@ -316,7 +320,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
-                    color: AppColors.secondaryColorDark,
+                    color: AppColors.primaryColorDark(context),
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -373,7 +377,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
                   SwitchListTile(
                     title: Text(AppStr.get('isCredit')),
                     value: isCredit,
-                    activeColor: AppColors.secondaryColorDark,
+                    activeColor: AppColors.primaryColorDark(context),
                     onChanged: (val) => setState(() => isCredit = val),
                   ),
                   if (isCredit) ...[
@@ -428,11 +432,18 @@ class _AddCardScreenState extends State<AddCardScreen> {
                 const SizedBox(height: 24),
                 ElevatedButton.icon(
                   onPressed: _onSubmit,
-                  icon: Icon(Icons.save),
-                  label: Text(AppStr.get('addCard')),
+                  icon: Icon(
+                    Icons.save,
+                    color: Theme.of(context).colorScheme.onPrimary,
+                  ),
+                  label: Text(
+                    AppStr.get('addCard'),
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onPrimary,
+                    ),
+                  ),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.secondaryColorDark,
-                    foregroundColor: Colors.white,
+                    backgroundColor: AppColors.primaryColorDark(context),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
