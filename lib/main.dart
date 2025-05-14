@@ -1,4 +1,5 @@
 import 'package:financea/model/card/card_data.dart';
+import 'package:financea/model/category/category_data.dart';
 import 'package:financea/model/datas/add_data.dart';
 import 'package:financea/utils/app_str.dart';
 import 'package:financea/utils/user_settings.dart';
@@ -15,8 +16,11 @@ void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(AddDataAdapter());
   Hive.registerAdapter(CardDataAdapter());
+  Hive.registerAdapter(CategoryAdapter());
   await Hive.openBox<AddData>('data');
   await Hive.openBox<CardData>('cardData');
+  await Hive.openBox<Category>('categories');
+  //await Hive.deleteBoxFromDisk('categories');
 
   // Initialize UserSettings early to avoid any initialization issues
   final userSettings = UserSettings();

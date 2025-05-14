@@ -1,11 +1,13 @@
-import 'dart:developer';
 import 'package:financea/model/card/card_data.dart';
 import 'package:financea/model/datas/add_data.dart';
 import 'package:financea/utils/app_colors.dart';
 import 'package:financea/utils/app_str.dart';
+import 'package:financea/views/add_tasks/widgets/amount_field.dart';
 import 'package:financea/views/add_tasks/widgets/background_container.dart';
+import 'package:financea/views/add_tasks/widgets/category_dropdown.dart';
+import 'package:financea/views/add_tasks/widgets/save_button.dart';
+import 'package:financea/views/add_tasks/widgets/type_selector.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
 
 class AddScreen extends StatefulWidget {
@@ -27,8 +29,6 @@ class _AddScreenState extends State<AddScreen> {
   FocusNode am = FocusNode();
 
   bool isSub = false;
-
-  final List<String> _item = ['Food', 'Transfer', 'Transport', 'Education'];
   final List<String> _item1 = ['Income', 'Expense'];
   List<int> mesesOpciones = [1, 3, 6, 9, 12, 18, 24];
   int selectedMeses = 1;
@@ -47,6 +47,15 @@ class _AddScreenState extends State<AddScreen> {
   }
 
   @override
+  void dispose() {
+    ex.dispose();
+    am.dispose();
+    expalin_C.dispose();
+    amount_C.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[200],
@@ -62,6 +71,7 @@ class _AddScreenState extends State<AddScreen> {
     );
   }
 
+  // ignore: non_constant_identifier_names
   Container main_container() {
     return Container(
       decoration: BoxDecoration(
@@ -73,13 +83,46 @@ class _AddScreenState extends State<AddScreen> {
       child: Column(
         children: [
           SizedBox(height: 30),
-          categoryName(),
+          CategoryDropdown(
+            selectedCategory: selectedItem,
+            hintText: AppStr.get('category'),
+            onChanged: (value) {
+              if (value == 'add_new') {
+                setState(() {
+                  selectedItem = null;
+                });
+              } else {
+                setState(() {
+                  selectedItem = value;
+                });
+              }
+            },
+          ),
           SizedBox(height: 30),
           explain(),
           SizedBox(height: 30),
-          amount(),
+          AmountField(
+            controller: amount_C,
+            focusNode: am,
+            labelText: AppStr.get('amount'),
+            focusedBorderColor: AppColors.secondaryColor,
+          ),
           SizedBox(height: 30),
-          how(),
+          TypeSelector(
+            options: _item1,
+            initialValue: selectedItem2,
+            hintText: AppStr.get('how'),
+            onChanged: (String value) {
+              setState(() {
+                selectedItem2 = value;
+              });
+            },
+            textStyle: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: Colors.black,
+            ),
+          ),
           SizedBox(height: 30),
           datePicker(),
           SizedBox(height: 30),
@@ -132,7 +175,20 @@ class _AddScreenState extends State<AddScreen> {
           if (selectedItem2 == 'Expense' && selectedCard?.isCredit == true)
             meses(),
           Spacer(),
-          save(),
+          SaveButton(
+            context: context,
+            selectedCategory: selectedItem,
+            selectedType: selectedItem2,
+            amountController: amount_C,
+            explanationController: expalin_C,
+            selectedDate: date,
+            selectedCard: selectedCard,
+            isSubscription: isSub,
+            selectedMonths: selectedMeses,
+            onSuccess: () => Navigator.of(context).pop(),
+            dataBox: box,
+            cardBox: cardBox,
+          ),
           SizedBox(height: 40),
         ],
       ),
@@ -141,102 +197,27 @@ class _AddScreenState extends State<AddScreen> {
 
   Padding meses() {
     return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: Row(
-              children: [
-                const Text(
-                  "MSI:",
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(width: 10),
-                DropdownButton<int>(
-                  value: selectedMeses,
-                  items:
-                      mesesOpciones.map((int value) {
-                        return DropdownMenuItem<int>(
-                          value: value,
-                          child: Text("$value MSI"),
-                        );
-                      }).toList(),
-                  onChanged: (int? newValue) {
-                    setState(() {
-                      selectedMeses = newValue ?? 1;
-                    });
-                  },
-                ),
-              ],
-            ),
-          );
-  }
-
-  GestureDetector save() {
-    return GestureDetector(
-      onTap: () {
-        if (selectedItem == null ||
-            selectedItem2 == null ||
-            amount_C.text.isEmpty) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar( SnackBar(content: Text(AppStr.get('fillAllFields'))));
-          return;
-        }
-
-        double? amount = double.tryParse(amount_C.text);
-        if (amount == null) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar( SnackBar(content: Text(AppStr.get('invalidAmount'))));
-          return;
-        }
-
-        var add = AddData(
-          selectedItem!,
-          expalin_C.text,
-          amount_C.text,
-          selectedItem2!,
-          date,
-          selectedCard?.cardName ?? AppStr.get('noPaymentMethod'),
-          isSub,
-          selectedItem2 == 'Expense' && selectedCard?.isCredit == true ? selectedMeses : 1,
-        );
-        box.add(add);
-        //Si es gasto, restar de la tarjeta y sino suma a la tarjeta
-        if (selectedCard != null && selectedCard!.isCredit) {
-          double current = selectedCard!.currentBalance ?? 0.0;
-          double amount = double.tryParse(amount_C.text) ?? 0.0;
-
-          if (selectedItem2 == 'Expense') {
-            selectedCard!.currentBalance = current + amount;
-          } else if (selectedItem2 == 'Income') {
-            selectedCard!.currentBalance = current - amount;
-          }
-
-          final cardIndex = cardBox.values.toList().indexOf(selectedCard!);
-          if (cardIndex != -1) {
-            cardBox.putAt(cardIndex, selectedCard!);
-          }
-        }
-        log(
-          '${add.name}, ${add.explain}, ${add.amount}, ${add.IN}, ${add.datetime}',
-        );
-        Navigator.of(context).pop();
-      },
-      child: Container(
-        alignment: Alignment.center,
-        height: 50,
-        width: MediaQuery.of(context).size.width - 200,
-        decoration: BoxDecoration(
-          color: AppColors.secondaryColor,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Text(
-          AppStr.get('save'),
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w600,
-            color: Colors.white,
+      padding: const EdgeInsets.symmetric(horizontal: 15),
+      child: Row(
+        children: [
+          const Text("MSI:", style: TextStyle(fontWeight: FontWeight.bold)),
+          const SizedBox(width: 10),
+          DropdownButton<int>(
+            value: selectedMeses,
+            items:
+                mesesOpciones.map((int value) {
+                  return DropdownMenuItem<int>(
+                    value: value,
+                    child: Text("$value MSI"),
+                  );
+                }).toList(),
+            onChanged: (int? newValue) {
+              setState(() {
+                selectedMeses = newValue ?? 1;
+              });
+            },
           ),
-        ),
+        ],
       ),
     );
   }
@@ -259,7 +240,7 @@ class _AddScreenState extends State<AddScreen> {
           );
           if (newDate == null) return;
           setState(() {
-            date = newDate!;
+            date = newDate;
           });
         },
         child: Text(
@@ -302,209 +283,6 @@ class _AddScreenState extends State<AddScreen> {
               ),
             ),
           ),
-        ),
-      ),
-    );
-  }
-
-  Padding amount() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15.0),
-      child: Container(
-        width: MediaQuery.of(context).size.width - 180,
-        child: TextField(
-          keyboardType: TextInputType.number,
-          inputFormatters: [
-            FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
-          ],
-          focusNode: am,
-          controller: amount_C,
-          decoration: InputDecoration(
-            contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-            labelText: AppStr.get('amount'),
-            labelStyle: TextStyle(
-              fontSize: 17,
-              fontWeight: FontWeight.w600,
-              color: Colors.black,
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: BorderSide(color: Colors.grey.shade300, width: 2),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: BorderSide(
-                color: AppColors.secondaryColorDark,
-                width: 2,
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Padding categoryName() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15.0),
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 15),
-        width: MediaQuery.of(context).size.width - 180,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(width: 2, color: Colors.grey[300]!),
-        ),
-        child: DropdownButton<String>(
-          value: selectedItem,
-          onChanged: (value) {
-            setState(() {
-              selectedItem = value!;
-            });
-          },
-          items:
-              _item
-                  .map(
-                    (e) => DropdownMenuItem(
-                      value: e,
-                      child: Row(
-                        children: [
-                          SizedBox(
-                            width: 40,
-                            height: 40,
-                            //Agregar imagenes de e
-                            child: Image.asset('img/$e.png'),
-                          ),
-                          SizedBox(width: 10),
-                          Text(
-                            e,
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  )
-                  .toList(),
-          selectedItemBuilder:
-              (context) =>
-                  _item
-                      .map(
-                        (e) => Row(
-                          children: [
-                            SizedBox(
-                              width: 42,
-                              child: Image.asset('img/$e.png'),
-                            ),
-                            SizedBox(width: 10),
-                            Text(
-                              e,
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
-                      .toList(),
-          hint: Text(
-            AppStr.get('name'),
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              color: Colors.black,
-            ),
-          ),
-          dropdownColor: Colors.white,
-          isExpanded: true,
-          underline: Container(),
-        ),
-      ),
-    );
-  }
-
-  Padding how() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 15.0),
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 15),
-        width: MediaQuery.of(context).size.width - 180,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(width: 2, color: Colors.grey[300]!),
-        ),
-        child: DropdownButton<String>(
-          value: selectedItem2,
-          onChanged: (value) {
-            setState(() {
-              selectedItem2 = value!;
-            });
-          },
-          items:
-              _item1
-                  .map(
-                    (e) => DropdownMenuItem(
-                      value: e,
-                      child: Row(
-                        children: [
-                          SizedBox(
-                            width: 40,
-                            height: 40,
-                            //Agregar imagenes de e
-                            child: Image.asset('img/$e.png'),
-                          ),
-                          SizedBox(width: 10),
-                          Text(
-                            e,
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.black,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  )
-                  .toList(),
-          selectedItemBuilder:
-              (context) =>
-                  _item1
-                      .map(
-                        (e) => Row(
-                          children: [
-                            SizedBox(
-                              width: 42,
-                              child: Image.asset('img/$e.png'),
-                            ),
-                            SizedBox(width: 10),
-                            Text(
-                              e,
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
-                      .toList(),
-          hint: Text(
-            AppStr.get('how'),
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-              color: Colors.black,
-            ),
-          ),
-          dropdownColor: Colors.white,
-          isExpanded: true,
-          underline: Container(),
         ),
       ),
     );

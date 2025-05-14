@@ -1,5 +1,6 @@
 import 'package:financea/utils/app_colors.dart';
 import 'package:financea/utils/app_str.dart';
+import 'package:financea/views/add_tasks/categories_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -46,7 +47,13 @@ class BackgroundContainer extends StatelessWidget {
                       ),
                     ),
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const ManageCategoriesScreen(),
+                          ),
+                        );
+                      },
                       child: Icon(
                         FontAwesomeIcons.paperclip,
                         color: Colors.white,

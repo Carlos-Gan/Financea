@@ -1,7 +1,7 @@
 import 'package:hive/hive.dart';
 
 part 'card_data.g.dart';
-@HiveType(typeId: 1)
+@HiveType(typeId: 2)
 class CardData {
   @HiveField(0)
   final String cardName;

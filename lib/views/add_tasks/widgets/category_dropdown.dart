@@ -1,0 +1,484 @@
+import 'dart:developer';
+
+import 'package:financea/model/category/category_data.dart';
+import 'package:financea/utils/app_icons.dart';
+import 'package:financea/utils/app_str.dart';
+import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:hive/hive.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+
+class CategoryDropdown extends StatefulWidget {
+  final String? selectedCategory;
+  final ValueChanged<String?> onChanged;
+  final String hintText;
+  final TextStyle? textStyle;
+  final Color dropdownColor;
+
+  const CategoryDropdown({
+    Key? key,
+    required this.onChanged,
+    required this.hintText,
+    this.selectedCategory,
+    this.textStyle,
+    this.dropdownColor = Colors.white,
+  }) : super(key: key);
+
+  @override
+  _CategoryDropdownState createState() => _CategoryDropdownState();
+}
+
+class _CategoryDropdownState extends State<CategoryDropdown> {
+  final categoryBox = Hive.box<Category>('categories');
+  final TextEditingController _newCategoryController = TextEditingController();
+  String? _selectedCategory;
+
+  // Mapeo de categorías a íconos
+  final Map<String, IconData> _categoryIcons = {
+    'Food': Icons.restaurant,
+    'Transport': Icons.directions_car,
+    'Education': Icons.school,
+    'Shopping': Icons.shopping_cart,
+    'Bills': Icons.receipt,
+    'Health': Icons.medical_services,
+    'Entertainment': Icons.movie,
+    'Other': Icons.category,
+  };
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedCategory = widget.selectedCategory;
+    _initializeCategories();
+  }
+
+  Future<void> _initializeCategories() async {
+    try {
+      if (categoryBox.isEmpty) {
+        await _addDefaultCategories();
+      }
+      setState(() {});
+    } catch (e) {
+      // Manejo de errores si es necesario
+      log("Error initializing categories: $e");
+    }
+  }
+
+  Future<void> _addDefaultCategories() async {
+    try {
+      final defaultCategories = [
+        Category(
+          name: 'Food',
+          icon: FontAwesomeIcons.burger,
+          color: Colors.yellowAccent,
+        ),
+        Category(
+          name: 'Transport',
+          icon: FontAwesomeIcons.plane,
+          color: Colors.grey,
+        ),
+        Category(
+          name: 'Education',
+          icon: FontAwesomeIcons.book,
+          color: Colors.blue,
+        ),
+        Category(
+          name: 'Shopping',
+          icon: FontAwesomeIcons.bagShopping,
+          color: Colors.purple,
+        ),
+        Category(
+          name: 'Bills',
+          icon: FontAwesomeIcons.moneyBills,
+          color: Colors.red,
+        ),
+      ];
+
+      await categoryBox.addAll(defaultCategories);
+    } catch (e) {
+      // Manejo de errores si es necesario
+      log("Error adding default categories: $e");
+    }
+  }
+
+  Future<void> _addNewCategory(String name, IconData icon, Color color) async {
+    if (name.trim().isEmpty) return;
+    try {
+      final newCategory = Category(name: name.trim(), icon: icon, color: color);
+
+      await categoryBox.add(newCategory);
+      _newCategoryController.clear();
+
+      setState(() {
+        _selectedCategory = newCategory.name;
+      });
+
+      widget.onChanged(newCategory.name);
+    } catch (e) {
+      // Manejo de errores si es necesario
+      log("Error adding new category: $e");
+    }
+  }
+
+  IconData _selectedIcon = FontAwesomeIcons.question;
+  Color _selectedColor = Colors.blue;
+
+  void _showAddCategoryDialog() {
+    _selectedIcon = FontAwesomeIcons.question;
+    _selectedColor = Colors.blue;
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder:
+              (context, setState) => AlertDialog(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                title: Text(
+                  AppStr.get('addCategory'),
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                ),
+                content: SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  height: 430,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TextField(
+                          controller: _newCategoryController,
+                          decoration: InputDecoration(
+                            labelText: AppStr.get('name_category'),
+                            labelStyle: const TextStyle(
+                              fontWeight: FontWeight.w500,
+                            ),
+                            filled: true,
+                            fillColor: Colors.grey[100],
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide.none,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+
+                        Text(
+                          "Elige un ícono:",
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 10),
+
+                        // Selector de íconos
+                        Container(
+                          constraints: const BoxConstraints(maxHeight: 250),
+                          child: GridView.builder(
+                            shrinkWrap: true,
+                            physics: const BouncingScrollPhysics(),
+                            itemCount: availableIcons.length,
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 5,
+                                  mainAxisSpacing: 12,
+                                  crossAxisSpacing: 12,
+                                ),
+                            itemBuilder: (context, index) {
+                              final icon = availableIcons[index];
+                              final isSelected = _selectedIcon == icon;
+                              return GestureDetector(
+                                onTap: () {
+                                  setState(() => _selectedIcon = icon);
+                                },
+                                child: AnimatedContainer(
+                                  duration: const Duration(milliseconds: 200),
+                                  padding: const EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    color:
+                                        isSelected
+                                            ? _selectedColor.withOpacity(0.15)
+                                            : Colors.grey[100],
+                                    border: Border.all(
+                                      color:
+                                          isSelected
+                                              ? _selectedColor
+                                              : Colors.transparent,
+                                      width: 2,
+                                    ),
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Icon(
+                                    icon,
+                                    color:
+                                        isSelected
+                                            ? _selectedColor
+                                            : Colors.grey[700],
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+
+                        const SizedBox(height: 20),
+
+                        Text(
+                          "Color:",
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 10),
+                        // Selector de color
+                        GestureDetector(
+                          onTap: () {
+                            showDialog(
+                              context: context,
+                              builder:
+                                  (_) => AlertDialog(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    title: const Text("Selecciona un color"),
+                                    content: SingleChildScrollView(
+                                      child: BlockPicker(
+                                        pickerColor: _selectedColor,
+                                        onColorChanged: (color) {
+                                          setState(
+                                            () => _selectedColor = color,
+                                          );
+                                          Navigator.pop(context);
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                            );
+                          },
+                          // Muestra el color seleccionado
+                          child: Container(
+                            width: 40,
+                            height: 40,
+                            margin: const EdgeInsets.only(top: 5),
+                            decoration: BoxDecoration(
+                              color: _selectedColor,
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: Colors.black54,
+                                width: 1,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                actionsPadding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 10,
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    style: TextButton.styleFrom(
+                      foregroundColor: Colors.grey[600],
+                    ),
+                    child: Text(AppStr.get('cancel')),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      final IconData iconToSave = IconData(
+                        _selectedIcon.codePoint,
+                        fontFamily: _selectedIcon.fontFamily,
+                        fontPackage:
+                            _selectedIcon.fontFamily?.contains('FontAwesome') ==
+                                    true
+                                ? 'font_awesome_flutter'
+                                : null,
+                      );
+                      _addNewCategory(
+                        _newCategoryController.text.trim(),
+                        iconToSave,
+                        _selectedColor,
+                      );
+                      Navigator.pop(context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Theme.of(context).colorScheme.primary,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 24,
+                        vertical: 12,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: Text(
+                      AppStr.get('save'),
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ],
+              ),
+        );
+      },
+    );
+  }
+
+  // Obtener ícono basado en el nombre de la categoría
+  IconData _getIconForCategory(String categoryName) {
+    try {
+      return _categoryIcons[categoryName] ?? Icons.category;
+    } catch (e) {
+      // Manejo de errores si es necesario
+      log("Error getting icon for category: $e");
+      return Icons.category;
+    }
+  }
+
+  // Obtener color basado en el nombre de la categoría
+  Color _getColorForCategory(String categoryName) {
+    try {
+      return categoryBox.values
+          .firstWhere(
+            (category) => category.name == categoryName,
+            orElse:
+                () => Category(
+                  name: 'Other',
+                  icon: Icons.category,
+                  color: Colors.grey,
+                ),
+          )
+          .color;
+    } catch (e) {
+      // Manejo de error al obtener el color
+      print("Error al obtener el color para la categoría $categoryName: $e");
+      return Colors.grey;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 15),
+        width: MediaQuery.of(context).size.width - 180,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(width: 2, color: Colors.grey[300]!),
+        ),
+        child: DropdownButton<String>(
+          value: _selectedCategory,
+          onChanged: (value) {
+            if (value == 'add_new') {
+              _showAddCategoryDialog();
+            } else {
+              setState(() => _selectedCategory = value);
+              widget.onChanged(value);
+            }
+          },
+          items: [
+            ...categoryBox.values.map((category) {
+              return DropdownMenuItem<String>(
+                value: category.name,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Icon(
+                        category.icon,
+                        size: 30,
+                        color: category.color,
+                      ),
+                      const SizedBox(width: 30),
+                      Text(
+                        category.name,
+                        style:
+                            widget.textStyle ??
+                            const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.black,
+                            ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }).toList(),
+            DropdownMenuItem<String>(
+              value: 'add_new',
+              child: Row(
+                children: [
+                  const Icon(Icons.add, size: 30, color: Colors.blue),
+                  const SizedBox(width: 10),
+                  Text(
+                    AppStr.get('addCategory'),
+                    style: (widget.textStyle ?? const TextStyle()).copyWith(
+                      color: Colors.blue,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+          selectedItemBuilder: (context) {
+            return [
+              ...categoryBox.values.map((category) {
+                return Row(
+                  children: [
+                    Icon(
+                      category.icon,
+                      size: 32,
+                      color: category.color,
+                    ),
+                    const SizedBox(width: 10),
+                    Text(
+                      category.name,
+                      style:
+                          widget.textStyle ??
+                          const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black,
+                          ),
+                    ),
+                  ],
+                );
+              }).toList(),
+              Row(
+                children: [
+                  const Icon(Icons.add, size: 32, color: Colors.blue),
+                  const SizedBox(width: 10),
+                  Text(AppStr.get('addCategory')),
+                ],
+              ),
+            ];
+          },
+          hint: Text(
+            widget.hintText,
+            style:
+                widget.textStyle ??
+                const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black,
+                ),
+          ),
+          dropdownColor: widget.dropdownColor,
+          isExpanded: true,
+          underline: Container(),
+        ),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _newCategoryController.dispose();
+    super.dispose();
+  }
+}
