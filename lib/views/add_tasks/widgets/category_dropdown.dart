@@ -5,7 +5,6 @@ import 'package:financea/utils/app_icons.dart';
 import 'package:financea/utils/app_str.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:hive/hive.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -195,6 +194,7 @@ class _CategoryDropdownState extends State<CategoryDropdown> {
                                   decoration: BoxDecoration(
                                     color:
                                         isSelected
+                                            // ignore: deprecated_member_use
                                             ? _selectedColor.withOpacity(0.15)
                                             : Colors.grey[100],
                                     border: Border.all(

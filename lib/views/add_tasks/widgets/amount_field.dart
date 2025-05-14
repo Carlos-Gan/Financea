@@ -31,7 +31,7 @@ class AmountField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: padding ?? const EdgeInsets.symmetric(horizontal: 15.0),
-      child: Container(
+      child: SizedBox(
         width: width ?? MediaQuery.of(context).size.width - 180,
         child: TextField(
           keyboardType: TextInputType.number,

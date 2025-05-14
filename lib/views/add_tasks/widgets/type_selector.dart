@@ -8,15 +8,16 @@ class TypeSelector extends StatefulWidget {
   final TextStyle? textStyle;
 
   const TypeSelector({
-    Key? key,
+    super.key,
     required this.options,
     required this.onChanged,
     required this.hintText,
     this.initialValue,
     this.textStyle,
-  }) : super(key: key);
+  });
 
   @override
+  // ignore: library_private_types_in_public_api
   _TypeSelectorState createState() => _TypeSelectorState();
 }
 

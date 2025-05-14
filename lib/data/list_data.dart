@@ -1,4 +1,4 @@
-import 'package:financea/data/1.dart';
+import 'package:financea/data/money.dart';
 
 List<Money> geter() {
   return [

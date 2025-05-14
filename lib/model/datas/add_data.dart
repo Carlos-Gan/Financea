@@ -10,6 +10,7 @@ class AddData extends HiveObject {
   @HiveField(2)
   String amount;
   @HiveField(3)
+  // ignore: non_constant_identifier_names
   String IN;
   @HiveField(4)
   DateTime datetime;

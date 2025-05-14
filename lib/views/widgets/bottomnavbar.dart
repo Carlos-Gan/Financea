@@ -17,6 +17,7 @@ class BottomNavBar extends StatefulWidget {
 
 class _BottomNavigationBarState extends State<BottomNavBar> {
   int _selectedIndex = 0;
+  // ignore: non_constant_identifier_names
   List Screen = [HomeView(), StatisticsView(), CardsView(), SettingsScreen()];
   @override
   Widget build(BuildContext context) {

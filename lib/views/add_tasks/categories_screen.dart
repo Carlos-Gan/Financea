@@ -74,6 +74,7 @@ class _ManageCategoriesScreenState extends State<ManageCategoriesScreen> {
                     ElevatedButton(
                       onPressed: () {
                         category.name = nameController.text.trim();
+                        // ignore: deprecated_member_use
                         category.colorValue = selectedColor.value;
                         category.save();
                         Navigator.pop(context, true); // Cierra pantalla de edición

@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class StatisticsView extends StatefulWidget {
-  const StatisticsView({Key? key}) : super(key: key);
+  const StatisticsView({super.key});
 
   @override
   State<StatisticsView> createState() => _StatisticsViewState();

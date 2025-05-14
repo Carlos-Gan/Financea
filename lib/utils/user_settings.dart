@@ -4,7 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class UserSettings extends ChangeNotifier {
   String _username = '';
   String _selectedLanguage = 'English';
-  bool _isLoading = false;
+  final bool _isLoading = false;
 
   bool get isLoading => _isLoading;
   String get username => _username;

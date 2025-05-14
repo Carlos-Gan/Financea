@@ -9,7 +9,7 @@ import 'package:intl/intl.dart';
 class Chart extends StatefulWidget {
   final int indexx; // 0:Day,1:Week,2:Month,3:Year
   final bool showExpenses; // true=expenses, false=income
-  const Chart({Key? key, required this.indexx, required this.showExpenses}) : super(key: key);
+  const Chart({super.key, required this.indexx, required this.showExpenses});
 
   @override
   State<Chart> createState() => _ChartState();
@@ -97,7 +97,7 @@ class _ChartState extends State<Chart> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: double.infinity,
       height: 300,
       child: SfCartesianChart(

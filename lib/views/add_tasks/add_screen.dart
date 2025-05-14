@@ -22,7 +22,9 @@ class _AddScreenState extends State<AddScreen> {
   DateTime date = DateTime.now();
   String? selectedItem;
   String? selectedItem2;
+  // ignore: non_constant_identifier_names
   final TextEditingController expalin_C = TextEditingController();
+  // ignore: non_constant_identifier_names
   final TextEditingController amount_C = TextEditingController();
 
   FocusNode ex = FocusNode();
@@ -258,7 +260,7 @@ class _AddScreenState extends State<AddScreen> {
   Padding explain() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15.0),
-      child: Container(
+      child: SizedBox(
         width: MediaQuery.of(context).size.width - 180,
         child: TextField(
           focusNode: ex,

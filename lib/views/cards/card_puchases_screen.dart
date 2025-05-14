@@ -91,7 +91,8 @@ class _CardPurchasesScreenState extends State<CardPurchasesScreen> {
                 });
               },
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(
+                backgroundColor: WidgetStateProperty.all(
+                  // ignore: deprecated_member_use
                   AppColors.secondaryColor.withOpacity(0.1),
                 ),
               ),

@@ -15,6 +15,7 @@ import 'package:intl/intl.dart';
 
 // ignore: must_be_immutable
 class HomeView extends StatelessWidget {
+  // ignore: prefer_typing_uninitialized_variables
   var history;
   final box = Hive.box<AddData>('data');
 

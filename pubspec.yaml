@@ -1,7 +1,7 @@
 name: financea
 description: "App para administrar tus finanzas personales"
 publish_to: 'none'
-version: 1.2.0
+version: 1.2.5
 
 environment:
   sdk: ^3.7.2
@@ -48,6 +48,8 @@ dev_dependencies:
     sdk: flutter
   build_runner: ^2.4.15
   hive_generator: ^2.0.1
+  rename: ^3.1.0
+  flutter_native_splash: ^2.4.6
   
   flutter_lints: ^5.0.0
 

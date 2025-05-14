@@ -20,7 +20,7 @@ class SaveButton extends StatelessWidget {
   final Box<CardData> cardBox;
 
   const SaveButton({
-    Key? key,
+    super.key,
     required this.context,
     required this.selectedCategory,
     required this.selectedType,
@@ -33,7 +33,7 @@ class SaveButton extends StatelessWidget {
     required this.onSuccess,
     required this.dataBox,
     required this.cardBox,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

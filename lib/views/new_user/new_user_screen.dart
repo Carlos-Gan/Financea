@@ -43,6 +43,7 @@ class _NewUserScreenState extends State<NewUserScreen> {
     await prefs.setString('userName', _nameController.text);
     await prefs.setString('language', selectedLanguage!);
 
+    // ignore: use_build_context_synchronously
     Provider.of<UserSettings>(context, listen: false)
       ..setUsername(_nameController.text)
       ..setLanguage(selectedLanguage!);
@@ -60,7 +61,7 @@ class _NewUserScreenState extends State<NewUserScreen> {
       builder: (context, userSettings, child) {
         final theme = Theme.of(context);
         return Scaffold(
-          backgroundColor: theme.colorScheme.background,
+          backgroundColor: theme.colorScheme.surface,
           body: Center(
             child: SingleChildScrollView(
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),

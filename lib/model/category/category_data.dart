@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
@@ -21,6 +20,7 @@ class Category extends HiveObject {
   Category({required this.name, required IconData icon, required Color color})
     : iconCodePoint = icon.codePoint,
       fontFamily = icon.fontFamily ?? 'MaterialIcons',
+      // ignore: deprecated_member_use
       colorValue = color.value;
 
   IconData get icon => IconData(
