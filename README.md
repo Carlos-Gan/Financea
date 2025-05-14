@@ -1,3 +1,3 @@
-# finance_app
+Financea
 
-A new Flutter project.
+Master Your Finances, Empower Your Future
