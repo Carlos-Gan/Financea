@@ -1,7 +1,7 @@
 name: financea
 description: "App para administrar tus finanzas personales"
 publish_to: 'none'
-version: 1.2.5
+version: 1.2.10
 
 environment:
   sdk: ^3.7.2
